@@ -3,7 +3,7 @@ title: v0.1.0 — Initial specification
 type: added
 ---
 
-The first published version of the Crosswalk API definition: **14 paths, 19 operations, 20 schemas**, in OpenAPI 3.1.
+The first published version of the Fitgap API definition: **14 paths, 19 operations, 20 schemas**, in OpenAPI 3.1.
 
 Three design decisions are worth calling out, because they're the ones that shaped everything else.
 

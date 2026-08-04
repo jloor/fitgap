@@ -1,14 +1,14 @@
 openapi: 3.1.0
 
 info:
-  title: Crosswalk API
+  title: Fitgap API
   version: 0.1.0
   summary: Find the gap between the work you've done and the work you want — then stage the projects that close it.
   description: |
-    **Crosswalk** maps a person's evidenced capabilities against a role they want, identifies the gaps,
+    **Fitgap** maps a person's evidenced capabilities against a role they want, identifies the gaps,
     and stages concrete projects to close them.
 
-    Most job-matching tools score a résumé against a posting and return a percentage. Crosswalk is built
+    Most job-matching tools score a résumé against a posting and return a percentage. Fitgap is built
     on a different premise: **a "gap" is not one thing.** Some gaps are real capability gaps. Some are
     adjacent experience that needs honest reframing. And some — often the most valuable — are capabilities
     the person genuinely holds that their record simply doesn't say out loud.
@@ -39,7 +39,7 @@ info:
 
     ## Excavation
 
-    When Crosswalk suspects an **unarticulated** gap — the requirement looks unmet, but the person's
+    When Fitgap suspects an **unarticulated** gap — the requirement looks unmet, but the person's
     history suggests otherwise — it returns *questions* rather than a verdict. Answering them can resolve
     the gap and write a new Inventory entry without any new work being done.
 
@@ -47,7 +47,7 @@ info:
     real.
 
   contact:
-    name: Crosswalk
+    name: Fitgap
     email: api@example.com
   license:
     name: MIT
@@ -62,9 +62,9 @@ x-readme:
     - javascript
 
 servers:
-  - url: https://api.crosswalk.example/v1
+  - url: https://api.fitgap.org/v1
     description: Production
-  - url: https://sandbox.api.crosswalk.example/v1
+  - url: https://sandbox.api.fitgap.org/v1
     description: Sandbox — seeded fixtures, no persistence
 
 security:
@@ -212,7 +212,7 @@ paths:
       tags: [Targets]
       summary: Create a target from a posting
       description: |
-        Supply either `sourceUrl` or `sourceText`. Crosswalk parses the posting into structured
+        Supply either `sourceUrl` or `sourceText`. Fitgap parses the posting into structured
         `requirements` and immediately evaluates it against the user's Filters.
 
         **The gate result is returned on creation.** If `gateStatus` is `failed`, analysis is blocked
@@ -263,13 +263,13 @@ paths:
           - language: curl
             name: Run an analysis
             code: |
-              curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
-                -H "Authorization: Bearer $CROSSWALK_KEY"
+              curl -X POST https://api.fitgap.org/v1/targets/tgt_91aF/analyses \
+                -H "Authorization: Bearer $FITGAP_KEY"
           - language: curl
             name: Override a failed gate
             code: |
-              curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
-                -H "Authorization: Bearer $CROSSWALK_KEY" \
+              curl -X POST https://api.fitgap.org/v1/targets/tgt_91aF/analyses \
+                -H "Authorization: Bearer $FITGAP_KEY" \
                 -H "Content-Type: application/json" \
                 -d '{"overrideGate": true, "overrideReason": "Warm referral; accepting the commute."}'
       summary: Run a gap analysis
@@ -378,13 +378,13 @@ paths:
           - language: curl
             name: Answer an excavation question
             code: |
-              curl -X POST https://api.crosswalk.example/v1/gaps/gap_5Qw2/excavations \
-                -H "Authorization: Bearer $CROSSWALK_KEY" \
+              curl -X POST https://api.fitgap.org/v1/gaps/gap_5Qw2/excavations \
+                -H "Authorization: Bearer $FITGAP_KEY" \
                 -H "Content-Type: application/json" \
                 -d '{"answers":[{"questionId":"qst_01","answer":"Yes — I built HL7 interfaces to PACS and DICOM systems."}]}'
       summary: Answer excavation questions
       description: |
-        For gaps typed `unarticulated`, Crosswalk returns targeted questions instead of a verdict.
+        For gaps typed `unarticulated`, Fitgap returns targeted questions instead of a verdict.
         Submitting answers can **resolve the gap without any new work being done** — and, when the answer
         establishes a real capability, writes a new Inventory entry.
 
@@ -567,7 +567,7 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      description: "A Crosswalk API key, sent as `Authorization: Bearer <key>`."
+      description: "A Fitgap API key, sent as `Authorization: Bearer <key>`."
 
   parameters:
     Limit:

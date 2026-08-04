@@ -38,13 +38,13 @@ jobs:
 
       # Fail fast on a malformed spec — a bad definition should never reach ReadMe.
       - name: Lint OpenAPI spec
-        run: npx --yes @redocly/cli@latest lint openapi/crosswalk.yaml
+        run: npx --yes @redocly/cli@latest lint openapi/fitgap.yaml
 
       # Dry runs surface frontmatter and slug problems without touching the project.
       - name: Dry-run spec upload
         if: ${{ github.event_name == 'pull_request' }}
         run: |
-          npx --yes rdme@latest openapi upload openapi/crosswalk.yaml \
+          npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
             --dry-run
 
@@ -78,7 +78,7 @@ jobs:
       # and a prompt in a runner is a hang, not a failure.
       - name: Upload OpenAPI definition
         run: |
-          npx --yes rdme@latest openapi upload openapi/crosswalk.yaml \
+          npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
             --confirm-overwrite
 

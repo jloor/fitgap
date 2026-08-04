@@ -5,14 +5,14 @@ title: Getting Started
 slug: getting-started
 content:
   excerpt: >-
-    Walk the full Crosswalk loop end to end — gates, targets, analysis,
+    Walk the full Fitgap loop end to end — gates, targets, analysis,
     excavation, and staged projects.
 privacy:
   view: public
 position: 1
 ---
 
-This walks the full Crosswalk loop end to end: define your constraints, add a target, run an analysis, close a gap, and watch your inventory change.
+This walks the full Fitgap loop end to end: define your constraints, add a target, run an analysis, close a gap, and watch your inventory change.
 
 > 📘 All requests use `Authorization: Bearer <key>`. The sandbox server is seeded with fixtures and persists nothing.
 
@@ -21,8 +21,8 @@ This walks the full Crosswalk loop end to end: define your constraints, add a ta
 Gates are non-negotiable constraints. They're evaluated on every target you create, **before** any analysis runs.
 
 ```bash
-curl -X PUT https://api.crosswalk.example/v1/filters \
-  -H "Authorization: Bearer $CROSSWALK_KEY" \
+curl -X PUT https://api.fitgap.org/v1/filters \
+  -H "Authorization: Bearer $FITGAP_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "filters": [
@@ -48,8 +48,8 @@ curl -X PUT https://api.crosswalk.example/v1/filters \
 ## 2. Add a target
 
 ```bash
-curl -X POST https://api.crosswalk.example/v1/targets \
-  -H "Authorization: Bearer $CROSSWALK_KEY" \
+curl -X POST https://api.fitgap.org/v1/targets \
+  -H "Authorization: Bearer $FITGAP_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Senior Data Migration Engineer",
@@ -83,8 +83,8 @@ The response includes parsed `requirements` and the gate result:
 ## 3. Run the analysis
 
 ```bash
-curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
-  -H "Authorization: Bearer $CROSSWALK_KEY"
+curl -X POST https://api.fitgap.org/v1/targets/tgt_91aF/analyses \
+  -H "Authorization: Bearer $FITGAP_KEY"
 ```
 
 ```json
@@ -101,8 +101,8 @@ curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
 ## 4. Look at the gaps
 
 ```bash
-curl https://api.crosswalk.example/v1/analyses/ana_04Bq/gaps \
-  -H "Authorization: Bearer $CROSSWALK_KEY"
+curl https://api.fitgap.org/v1/analyses/ana_04Bq/gaps \
+  -H "Authorization: Bearer $FITGAP_KEY"
 ```
 
 ```json
@@ -136,8 +136,8 @@ curl https://api.crosswalk.example/v1/analyses/ana_04Bq/gaps \
 The second gap isn't a capability gap. It's a **record** gap. Answer the question:
 
 ```bash
-curl -X POST https://api.crosswalk.example/v1/gaps/gap_5Qw2/excavations \
-  -H "Authorization: Bearer $CROSSWALK_KEY" \
+curl -X POST https://api.fitgap.org/v1/gaps/gap_5Qw2/excavations \
+  -H "Authorization: Bearer $FITGAP_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "answers": [
@@ -167,8 +167,8 @@ A `critical` gap closed with one question and zero new work, because it was neve
 ## 6. Stage a project for the gap that *is* real
 
 ```bash
-curl https://api.crosswalk.example/v1/gaps/gap_3Xz8/projects \
-  -H "Authorization: Bearer $CROSSWALK_KEY"
+curl https://api.fitgap.org/v1/gaps/gap_3Xz8/projects \
+  -H "Authorization: Bearer $FITGAP_KEY"
 ```
 
 Suggestions are sized to produce **checkable evidence**, not study plans:
@@ -178,7 +178,7 @@ Suggestions are sized to produce **checkable evidence**, not study plans:
   "data": [
     {
       "title": "Rebuild one internal utility as a small C# console app and publish it",
-      "rationale": "The requirement is maintenance of data-plumbing utilities — file parsing, Excel I/O, crosswalks, format conversion. Evidence beats a course certificate here.",
+      "rationale": "The requirement is maintenance of data-plumbing utilities — file parsing, Excel I/O, fitgaps, format conversion. Evidence beats a course certificate here.",
       "evidenceKind": "repository",
       "estimatedEffort": "days"
     }

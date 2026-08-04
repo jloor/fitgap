@@ -13,7 +13,7 @@ title: Publishing docs from CI with rdme v10
 ---
 
 Everything in this project publishes from a `git push`. The OpenAPI definition and these guides live in
-[the repo](https://github.com/jloor/crosswalk-api); a GitHub Action lints the spec and then uploads both
+[the repo](https://github.com/jloor/fitgap); a GitHub Action lints the spec and then uploads both
 through ReadMe's `rdme` CLI.
 
 Getting there took four attempts. The failures are worth writing down, because each one is a different
@@ -35,7 +35,7 @@ Older examples across the internet use a flatter command shape. In v10:
 Also required in automation:
 
 ```bash
-npx rdme@latest openapi upload openapi/crosswalk.yaml \
+npx rdme@latest openapi upload openapi/fitgap.yaml \
   --key="$README_API_KEY" \
   --confirm-overwrite
 ```
@@ -141,11 +141,11 @@ creates that category. That's what the API wanted all along.
 
 ```yaml
 - name: Lint OpenAPI spec
-  run: npx --yes @redocly/cli@latest lint openapi/crosswalk.yaml
+  run: npx --yes @redocly/cli@latest lint openapi/fitgap.yaml
 
 - name: Upload OpenAPI definition
   run: |
-    npx --yes rdme@latest openapi upload openapi/crosswalk.yaml \
+    npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
       --key="${{ secrets.README_API_KEY }}" \
       --confirm-overwrite
 
@@ -157,7 +157,7 @@ creates that category. That's what the API wanted all along.
 
 Lint before upload, so a malformed definition never reaches the project. Dry-run on pull requests, so
 frontmatter problems surface before they reach `main`. The full workflow is
-[in the repo](https://github.com/jloor/crosswalk-api/blob/main/.github/workflows/readme-sync.yml).
+[in the repo](https://github.com/jloor/fitgap/blob/main/.github/workflows/readme-sync.yml).
 
 ## If you're debugging your own sync
 

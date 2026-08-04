@@ -1,7 +1,7 @@
 {
   "title": "Close a gap you didn't know you had",
   "slug": "close-a-gap-you-didnt-know-you-had",
-  "description": "Walk the Crosswalk loop against a real role — and watch a critical gap close with a single question, because it was never a real gap.",
+  "description": "Walk the Fitgap loop against a real role — and watch a critical gap close with a single question, because it was never a real gap.",
   "privacy": {
     "view": "public"
   },
@@ -20,7 +20,7 @@
       },
       {
         "title": "Add the role you're considering",
-        "body": "Paste the posting. Crosswalk parses it into structured requirements and evaluates your gates immediately — the gate result comes back on creation, not later.\n\nEach requirement carries a `bar`: _familiarity_ and _proficient_ are different requirements wearing the same keyword.",
+        "body": "Paste the posting. Fitgap parses it into structured requirements and evaluates your gates immediately — the gate result comes back on creation, not later.\n\nEach requirement carries a `bar`: _familiarity_ and _proficient_ are different requirements wearing the same keyword.",
         "line_numbers": [
           "9-15"
         ]
@@ -34,7 +34,7 @@
       },
       {
         "title": "Two gaps, two different problems",
-        "body": "The **C#** requirement comes back typed `blocker` — genuinely not held. That needs a project, or a decision not to pursue the role.\n\nThe **imaging** requirement comes back `unarticulated` and `critical`. Crosswalk is not saying you lack it. It is saying your record does not evidence it while your history makes absence unlikely — so instead of a verdict, it returns a question.",
+        "body": "The **C#** requirement comes back typed `blocker` — genuinely not held. That needs a project, or a decision not to pursue the role.\n\nThe **imaging** requirement comes back `unarticulated` and `critical`. Fitgap is not saying you lack it. It is saying your record does not evidence it while your history makes absence unlikely — so instead of a verdict, it returns a question.",
         "line_numbers": [
           "21-23"
         ]
@@ -57,7 +57,7 @@
     "snippet": {
       "code_options": [
         {
-          "code": "# 1 — Set your gates. These are evaluated on every target BEFORE any analysis runs.\ncurl -X PUT https://api.crosswalk.example/v1/filters \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"filters\":[\n        {\"id\":\"flt_remote\",\"kind\":\"hard\",\"rule\":\"Remote, or on-site within 45 minutes of New York, NY.\"},\n        {\"id\":\"flt_band\",\"kind\":\"hard\",\"rule\":\"Posting must state a compensation range.\"}\n      ]}'\n\n# 2 — Add the role. Crosswalk parses it into requirements, each carrying a `bar`.\ncurl -X POST https://api.crosswalk.example/v1/targets \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"title\":\"Senior Data Migration Engineer\",\n       \"sourceText\":\"Advanced T-SQL. End-to-end migrations between production systems.\n                     Experience with RIS, PACS, EHR or similar healthcare applications.\n                     Developing or maintaining C# applications.\"}'\n\n# 3 — Run the analysis. Returns 409 gate_failed if a hard filter did not pass.\ncurl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"\n\n# 4 — Read the gaps. Two came back, and they are not the same kind of problem.\ncurl https://api.crosswalk.example/v1/analyses/ana_04Bq/gaps \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"\n\n# 5 — Answer the excavation question on the `unarticulated` gap.\ncurl -X POST https://api.crosswalk.example/v1/gaps/gap_5Qw2/excavations \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"answers\":[{\"questionId\":\"qst_01\",\n        \"answer\":\"Yes - I worked with PACS and DICOM as an HL7 Engineer: Merge and Sectra\n                  on the radiology side, Zeiss and Optos in ophthalmic imaging.\"}]}'\n\n# 6 — The gap is resolved, and Inventory now evidences the capability.\ncurl https://api.crosswalk.example/v1/gaps/gap_5Qw2 \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"",
+          "code": "# 1 — Set your gates. These are evaluated on every target BEFORE any analysis runs.\ncurl -X PUT https://api.fitgap.org/v1/filters \\\n  -H \"Authorization: Bearer $FITGAP_KEY\" \\\n  -d '{\"filters\":[\n        {\"id\":\"flt_remote\",\"kind\":\"hard\",\"rule\":\"Remote, or on-site within 45 minutes of New York, NY.\"},\n        {\"id\":\"flt_band\",\"kind\":\"hard\",\"rule\":\"Posting must state a compensation range.\"}\n      ]}'\n\n# 2 — Add the role. Fitgap parses it into requirements, each carrying a `bar`.\ncurl -X POST https://api.fitgap.org/v1/targets \\\n  -H \"Authorization: Bearer $FITGAP_KEY\" \\\n  -d '{\"title\":\"Senior Data Migration Engineer\",\n       \"sourceText\":\"Advanced T-SQL. End-to-end migrations between production systems.\n                     Experience with RIS, PACS, EHR or similar healthcare applications.\n                     Developing or maintaining C# applications.\"}'\n\n# 3 — Run the analysis. Returns 409 gate_failed if a hard filter did not pass.\ncurl -X POST https://api.fitgap.org/v1/targets/tgt_91aF/analyses \\\n  -H \"Authorization: Bearer $FITGAP_KEY\"\n\n# 4 — Read the gaps. Two came back, and they are not the same kind of problem.\ncurl https://api.fitgap.org/v1/analyses/ana_04Bq/gaps \\\n  -H \"Authorization: Bearer $FITGAP_KEY\"\n\n# 5 — Answer the excavation question on the `unarticulated` gap.\ncurl -X POST https://api.fitgap.org/v1/gaps/gap_5Qw2/excavations \\\n  -H \"Authorization: Bearer $FITGAP_KEY\" \\\n  -d '{\"answers\":[{\"questionId\":\"qst_01\",\n        \"answer\":\"Yes - I worked with PACS and DICOM as an HL7 Engineer: Merge and Sectra\n                  on the radiology side, Zeiss and Optos in ophthalmic imaging.\"}]}'\n\n# 6 — The gap is resolved, and Inventory now evidences the capability.\ncurl https://api.fitgap.org/v1/gaps/gap_5Qw2 \\\n  -H \"Authorization: Bearer $FITGAP_KEY\"",
           "language": "bash",
           "name": "The whole loop",
           "highlighted_syntax": "bash"

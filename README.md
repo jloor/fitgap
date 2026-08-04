@@ -1,8 +1,8 @@
-# Crosswalk API
+# Fitgap API
 
 **Find the gap between the work you've done and the work you want — then stage the projects that close it.**
 
-Crosswalk maps a person's evidenced capabilities against a role they want, types the gaps, and stages
+Fitgap maps a person's evidenced capabilities against a role they want, types the gaps, and stages
 concrete projects to close them.
 
 > **Status: design-stage specification.** This repository contains a complete, validated OpenAPI 3.1
@@ -71,7 +71,7 @@ applications they were never going to clear.
 ## Repository layout
 
 ```
-openapi/crosswalk.yaml            The specification (OpenAPI 3.1)
+openapi/fitgap.yaml            The specification (OpenAPI 3.1)
 docs/                             Guides, synced to ReadMe via the rdme CLI
 changelog/                        Changelog entries, synced the same way
 recipes/                          Recipe payload + notes (v2 API; not in the rdme CLI)
@@ -81,13 +81,13 @@ recipes/                          Recipe payload + notes (v2 API; not in the rdm
 ## Validate the spec locally
 
 ```bash
-npx @redocly/cli lint openapi/crosswalk.yaml
+npx @redocly/cli lint openapi/fitgap.yaml
 ```
 
 Or render it interactively:
 
 ```bash
-npx @redocly/cli preview-docs openapi/crosswalk.yaml
+npx @redocly/cli preview-docs openapi/fitgap.yaml
 ```
 
 ## Documentation

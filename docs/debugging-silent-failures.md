@@ -12,7 +12,7 @@ privacy:
 position: 1
 ---
 
-> 📘 This guide isn't about Crosswalk specifically. It's the debugging process I've used for twenty years across integrations with 30+ external systems, written down.
+> 📘 This guide isn't about Fitgap specifically. It's the debugging process I've used for twenty years across integrations with 30+ external systems, written down.
 
 The hardest integration problems aren't the ones where something is broken. Those announce themselves — a 500, a timeout, a stack trace, an alert.
 

@@ -3,7 +3,7 @@ category:
   uri: Getting Started
 content:
   excerpt: >-
-    What Crosswalk is, the premise it's built on, and where to go next.
+    What Fitgap is, the premise it's built on, and where to go next.
 position: 0
 privacy:
   view: public
@@ -11,7 +11,7 @@ slug: start-here
 title: Start Here
 ---
 
-**Crosswalk maps what a person can evidence against a role they want, types the gaps, and stages concrete projects to close them.**
+**Fitgap maps what a person can evidence against a role they want, types the gaps, and stages concrete projects to close them.**
 
 > 📘 **Status: design-stage specification.**
 > This project is a complete, validated OpenAPI 3.1 definition and its documentation. There's no running implementation yet — the spec is the artifact. The [API Reference](ref:) is generated directly from it.
@@ -59,9 +59,9 @@ Overrides exist — sometimes the exception is worth making — but the override
 - **[Getting Started](doc:getting-started)** — walk the whole loop end to end with real requests
 - **[Understanding Gaps](doc:understanding-gaps)** — the design argument the API rests on
 - **[Debugging Guide: When the API returns 200 and the data is still wrong](doc:debugging-silent-failures)** — the integration troubleshooting process this project came out of
-- **[API Reference](ref:)** — generated from `openapi/crosswalk.yaml`
+- **[API Reference](ref:)** — generated from `openapi/fitgap.yaml`
 
 ## Source
 
 The specification, these guides, and the CI pipeline that publishes them live at
-[github.com/jloor/crosswalk-api](https://github.com/jloor/crosswalk-api).
+[github.com/jloor/fitgap](https://github.com/jloor/fitgap).
