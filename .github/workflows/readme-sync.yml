@@ -1,0 +1,57 @@
+name: Sync docs to ReadMe
+
+# Publishes the OpenAPI spec and the Markdown guides to ReadMe on every push to main.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   README_API_KEY   — from ReadMe: Configuration → API Key
+#   README_VERSION   — e.g. "1.0" (the docs version in your ReadMe project)
+#
+# NOTE: rdme's command surface has changed across major versions. Before the first run,
+# check `npx rdme@latest --help` and adjust the commands below if your version differs.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'openapi/**'
+      - 'docs/**'
+      - '.github/workflows/readme-sync.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate OpenAPI spec
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Fail fast on a malformed spec — a bad spec should never reach ReadMe.
+      - name: Lint spec
+        run: npx @redocly/cli@latest lint openapi/crosswalk.yaml
+
+  publish:
+    name: Publish to ReadMe
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Publish OpenAPI spec
+        run: |
+          npx rdme@latest openapi openapi/crosswalk.yaml \
+            --key="${{ secrets.README_API_KEY }}" \
+            --version="${{ secrets.README_VERSION }}"
+
+      - name: Publish guides
+        run: |
+          npx rdme@latest docs ./docs \
+            --key="${{ secrets.README_API_KEY }}" \
+            --version="${{ secrets.README_VERSION }}"
