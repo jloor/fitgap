@@ -9,7 +9,7 @@ content:
     failures that don't announce themselves.
 privacy:
   view: public
-position: 1
+position: 2
 ---
 
 > 📘 This guide isn't about Crosswalk specifically. It's the debugging process I've used for twenty years across integrations with 30+ external systems, written down.
