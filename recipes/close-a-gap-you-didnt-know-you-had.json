@@ -1,0 +1,69 @@
+{
+  "title": "Close a gap you didn't know you had",
+  "slug": "close-a-gap-you-didnt-know-you-had",
+  "description": "Walk the Crosswalk loop against a real role — and watch a critical gap close with a single question, because it was never a real gap.",
+  "privacy": {
+    "view": "public"
+  },
+  "appearance": {
+    "background_color": "#0f2b46",
+    "emoji": "🔎"
+  },
+  "content": {
+    "steps": [
+      {
+        "title": "Gates run first — and they halt",
+        "body": "Constraints you will not trade away. A `hard` filter that fails blocks analysis entirely; a `soft` one only raises a flag.\n\nThe reason is unrecoverable cost. Analysis spends money and tailoring spends an afternoon. A role you could not accept should consume neither.",
+        "line_numbers": [
+          "1-7"
+        ]
+      },
+      {
+        "title": "Add the role you're considering",
+        "body": "Paste the posting. Crosswalk parses it into structured requirements and evaluates your gates immediately — the gate result comes back on creation, not later.\n\nEach requirement carries a `bar`: _familiarity_ and _proficient_ are different requirements wearing the same keyword.",
+        "line_numbers": [
+          "9-15"
+        ]
+      },
+      {
+        "title": "Run the analysis",
+        "body": "If a hard filter failed this returns `409 gate_failed` and produces nothing.\n\nYou can override with `overrideGate: true` and a reason — but the override is recorded on the Analysis. Breaking your own rule is fine. Forgetting that you broke it is not.",
+        "line_numbers": [
+          "17-19"
+        ]
+      },
+      {
+        "title": "Two gaps, two different problems",
+        "body": "The **C#** requirement comes back typed `blocker` — genuinely not held. That needs a project, or a decision not to pursue the role.\n\nThe **imaging** requirement comes back `unarticulated` and `critical`. Crosswalk is not saying you lack it. It is saying your record does not evidence it while your history makes absence unlikely — so instead of a verdict, it returns a question.",
+        "line_numbers": [
+          "21-23"
+        ]
+      },
+      {
+        "title": "Answer the question",
+        "body": "This is the step the API exists for.\n\nNo new work. No project. One sentence that was true the whole time and simply was not written down anywhere.",
+        "line_numbers": [
+          "25-30"
+        ]
+      },
+      {
+        "title": "Watch it resolve",
+        "body": "`resolved: true`, and a new Inventory entry now exists. The next analysis of _any_ target reads the improved record, so this gap will not appear again.\n\nThe `blocker` is still there and still needs evidence. That distinction is the entire point: one of these was a capability problem and one was a documentation problem, and treating them the same way is how people end up studying for things they already know.",
+        "line_numbers": [
+          "32-34"
+        ]
+      }
+    ],
+    "snippet": {
+      "code_options": [
+        {
+          "code": "# 1 — Set your gates. These are evaluated on every target BEFORE any analysis runs.\ncurl -X PUT https://api.crosswalk.example/v1/filters \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"filters\":[\n        {\"id\":\"flt_remote\",\"kind\":\"hard\",\"rule\":\"Remote, or on-site within 45 minutes of New York, NY.\"},\n        {\"id\":\"flt_band\",\"kind\":\"hard\",\"rule\":\"Posting must state a compensation range.\"}\n      ]}'\n\n# 2 — Add the role. Crosswalk parses it into requirements, each carrying a `bar`.\ncurl -X POST https://api.crosswalk.example/v1/targets \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"title\":\"Senior Data Migration Engineer\",\n       \"sourceText\":\"Advanced T-SQL. End-to-end migrations between production systems.\n                     Experience with RIS, PACS, EHR or similar healthcare applications.\n                     Developing or maintaining C# applications.\"}'\n\n# 3 — Run the analysis. Returns 409 gate_failed if a hard filter did not pass.\ncurl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"\n\n# 4 — Read the gaps. Two came back, and they are not the same kind of problem.\ncurl https://api.crosswalk.example/v1/analyses/ana_04Bq/gaps \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"\n\n# 5 — Answer the excavation question on the `unarticulated` gap.\ncurl -X POST https://api.crosswalk.example/v1/gaps/gap_5Qw2/excavations \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\" \\\n  -d '{\"answers\":[{\"questionId\":\"qst_01\",\n        \"answer\":\"Yes - I worked with PACS and DICOM as an HL7 Engineer: Merge and Sectra\n                  on the radiology side, Zeiss and Optos in ophthalmic imaging.\"}]}'\n\n# 6 — The gap is resolved, and Inventory now evidences the capability.\ncurl https://api.crosswalk.example/v1/gaps/gap_5Qw2 \\\n  -H \"Authorization: Bearer $CROSSWALK_KEY\"",
+          "language": "bash",
+          "name": "The whole loop",
+          "highlighted_syntax": "bash"
+        }
+      ]
+    },
+    "response": "{\n  \"gap\": {\n    \"id\": \"gap_5Qw2\",\n    \"type\": \"unarticulated\",\n    \"resolved\": true\n  },\n  \"resolved\": true,\n  \"inventoryEntryCreated\": \"inv_7Kd2\"\n}"
+  }
+}
