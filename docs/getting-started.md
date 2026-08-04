@@ -1,13 +1,15 @@
 ---
+category:
+  uri: Getting Started
 title: Getting Started
 slug: getting-started
 content:
   excerpt: >-
     Walk the full Crosswalk loop end to end — gates, targets, analysis,
     excavation, and staged projects.
-position: 1
 privacy:
   view: public
+position: 0
 ---
 
 This walks the full Crosswalk loop end to end: define your constraints, add a target, run an analysis, close a gap, and watch your inventory change.

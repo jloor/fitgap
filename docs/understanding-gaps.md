@@ -1,13 +1,15 @@
 ---
+category:
+  uri: Guides
 title: Understanding Gaps
 slug: understanding-gaps
 content:
   excerpt: >-
     Why a gap is not one thing — and why collapsing three different situations
     into one score makes the result unactionable.
-position: 2
 privacy:
   view: public
+position: 0
 ---
 
 The design decision the whole API rests on.

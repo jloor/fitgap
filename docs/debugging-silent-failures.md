@@ -1,13 +1,15 @@
 ---
+category:
+  uri: Guides
 title: 'Debugging Guide: When the API returns 200 and the data is still wrong'
 slug: debugging-silent-failures
 content:
   excerpt: >-
     The integration troubleshooting process this project came out of — for the
     failures that don't announce themselves.
-position: 3
 privacy:
   view: public
+position: 1
 ---
 
 > 📘 This guide isn't about Crosswalk specifically. It's the debugging process I've used for twenty years across integrations with 30+ external systems, written down.
