@@ -1,0 +1,26 @@
+{
+  "name": "fitgap-mock",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Mock server for the Fitgap API, served directly from the OpenAPI definition.",
+  "scripts": {
+    "sync-spec": "node scripts/sync-spec.mjs",
+    "prebuild": "npm run sync-spec",
+    "predev": "npm run sync-spec",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "check-spec": "node scripts/sync-spec.mjs --check"
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "yaml": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.6.0"
+  }
+}

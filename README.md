@@ -75,6 +75,7 @@ openapi/fitgap.yaml            The specification (OpenAPI 3.1)
 docs/                             Guides, synced to ReadMe via the rdme CLI
 changelog/                        Changelog entries, synced the same way
 recipes/                          Recipe payload + notes (v2 API; not in the rdme CLI)
+mock/                             Next.js mock server, driven by the spec itself
 .github/workflows/readme-sync.yml CI: lint, dry-run on PRs, publish on push to main
 ```
 

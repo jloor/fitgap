@@ -17,6 +17,7 @@ on:
       - 'openapi/**'
       - 'docs/**'
       - 'changelog/**'
+      - 'mock/**'
       - '.github/workflows/readme-sync.yml'
   pull_request:
     paths:
@@ -39,6 +40,11 @@ jobs:
       # Fail fast on a malformed spec — a bad definition should never reach ReadMe.
       - name: Lint OpenAPI spec
         run: npx --yes @redocly/cli@latest lint openapi/fitgap.yaml
+
+      # The mock serves a committed copy of the spec (Vercel builds only see
+      # files under mock/). This fails the build if the two ever diverge.
+      - name: Check mock spec is in sync
+        run: node mock/scripts/sync-spec.mjs --check
 
       # Dry runs surface frontmatter and slug problems without touching the project.
       - name: Dry-run spec upload
