@@ -1,10 +1,13 @@
 ---
 title: Getting Started
 slug: getting-started
-excerpt: Walk the full Crosswalk loop end to end — gates, targets, analysis, excavation, and staged projects.
-order: 1
-hidden: false
-# category: <paste your ReadMe category ID here before the first sync>
+content:
+  excerpt: >-
+    Walk the full Crosswalk loop end to end — gates, targets, analysis,
+    excavation, and staged projects.
+position: 1
+privacy:
+  view: public
 ---
 
 This walks the full Crosswalk loop end to end: define your constraints, add a target, run an analysis, close a gap, and watch your inventory change.

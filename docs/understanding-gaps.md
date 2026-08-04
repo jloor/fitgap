@@ -1,10 +1,13 @@
 ---
 title: Understanding Gaps
 slug: understanding-gaps
-excerpt: Why a gap is not one thing — and why collapsing three different situations into one score makes the result unactionable.
-order: 2
-hidden: false
-# category: <paste your ReadMe category ID here before the first sync>
+content:
+  excerpt: >-
+    Why a gap is not one thing — and why collapsing three different situations
+    into one score makes the result unactionable.
+position: 2
+privacy:
+  view: public
 ---
 
 The design decision the whole API rests on.

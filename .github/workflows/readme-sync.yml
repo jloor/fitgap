@@ -2,12 +2,13 @@ name: Sync docs to ReadMe
 
 # Publishes the OpenAPI spec and the Markdown guides to ReadMe on every push to main.
 #
-# Required repository secrets (Settings → Secrets and variables → Actions):
-#   README_API_KEY   — from ReadMe: Configuration → API Key
-#   README_VERSION   — e.g. "1.0" (the docs version in your ReadMe project)
+# Verified against rdme v10.9.4 (2026-08-04).
 #
-# NOTE: rdme's command surface has changed across major versions. Before the first run,
-# check `npx rdme@latest --help` and adjust the commands below if your version differs.
+# Required repository secret (Settings → Secrets and variables → Actions):
+#   README_API_KEY — from ReadMe: Configuration → API Key
+#
+# Both upload commands default to the `stable` branch of the ReadMe project.
+# To target a different one, add `--branch=<name>` to the steps below.
 
 on:
   push:
@@ -16,11 +17,15 @@ on:
       - 'openapi/**'
       - 'docs/**'
       - '.github/workflows/readme-sync.yml'
+  pull_request:
+    paths:
+      - 'openapi/**'
+      - 'docs/**'
   workflow_dispatch:
 
 jobs:
   validate:
-    name: Validate OpenAPI spec
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,13 +34,29 @@ jobs:
         with:
           node-version: '20'
 
-      # Fail fast on a malformed spec — a bad spec should never reach ReadMe.
-      - name: Lint spec
-        run: npx @redocly/cli@latest lint openapi/crosswalk.yaml
+      # Fail fast on a malformed spec — a bad definition should never reach ReadMe.
+      - name: Lint OpenAPI spec
+        run: npx --yes @redocly/cli@latest lint openapi/crosswalk.yaml
+
+      # Dry runs surface frontmatter and slug problems without touching the project.
+      - name: Dry-run spec upload
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          npx --yes rdme@latest openapi upload openapi/crosswalk.yaml \
+            --key="${{ secrets.README_API_KEY }}" \
+            --dry-run
+
+      - name: Dry-run guides upload
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          npx --yes rdme@latest docs upload ./docs \
+            --key="${{ secrets.README_API_KEY }}" \
+            --dry-run
 
   publish:
     name: Publish to ReadMe
     needs: validate
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -44,14 +65,15 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Publish OpenAPI spec
+      # --confirm-overwrite is required in CI: without it the command prompts,
+      # and a prompt in a runner is a hang, not a failure.
+      - name: Upload OpenAPI definition
         run: |
-          npx rdme@latest openapi openapi/crosswalk.yaml \
+          npx --yes rdme@latest openapi upload openapi/crosswalk.yaml \
             --key="${{ secrets.README_API_KEY }}" \
-            --version="${{ secrets.README_VERSION }}"
+            --confirm-overwrite
 
-      - name: Publish guides
+      - name: Upload guides
         run: |
-          npx rdme@latest docs ./docs \
-            --key="${{ secrets.README_API_KEY }}" \
-            --version="${{ secrets.README_VERSION }}"
+          npx --yes rdme@latest docs upload ./docs \
+            --key="${{ secrets.README_API_KEY }}"
