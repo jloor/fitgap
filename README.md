@@ -74,6 +74,7 @@ applications they were never going to clear.
 openapi/crosswalk.yaml            The specification (OpenAPI 3.1)
 docs/                             Guides, synced to ReadMe via the rdme CLI
 changelog/                        Changelog entries, synced the same way
+recipes/                          Recipe source (built by hand — rdme has no recipe command)
 .github/workflows/readme-sync.yml CI: lint, dry-run on PRs, publish on push to main
 ```
 
