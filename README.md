@@ -98,6 +98,8 @@ The rendered documentation hub is built with [ReadMe](https://readme.com) and sy
 - **Understanding Gaps** — the design decision the API rests on
 - **Debugging Guide: When the API returns 200 and the data is still wrong** — the integration
   troubleshooting process this project came out of
+- **Publishing docs from CI with rdme v10** — four failure modes from wiring this pipeline
+- **Mapping an API surface you don''t have docs for** — how the recipe endpoint was found
 
 ## Why this exists
 
