@@ -9,7 +9,7 @@ content:
     excavation, and staged projects.
 privacy:
   view: public
-position: 0
+position: 1
 ---
 
 This walks the full Crosswalk loop end to end: define your constraints, add a target, run an analysis, close a gap, and watch your inventory change.
