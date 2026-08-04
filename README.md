@@ -72,8 +72,9 @@ applications they were never going to clear.
 
 ```
 openapi/crosswalk.yaml            The specification (OpenAPI 3.1)
-docs/                             Documentation, synced to ReadMe via the rdme CLI
-.github/workflows/readme-sync.yml CI: publishes spec + docs on push to main
+docs/                             Guides, synced to ReadMe via the rdme CLI
+changelog/                        Changelog entries, synced the same way
+.github/workflows/readme-sync.yml CI: lint, dry-run on PRs, publish on push to main
 ```
 
 ## Validate the spec locally

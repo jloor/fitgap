@@ -53,6 +53,14 @@ info:
     name: MIT
     identifier: MIT
 
+x-readme:
+  explorer-enabled: true
+  samples-languages:
+    - curl
+    - node
+    - python
+    - javascript
+
 servers:
   - url: https://api.crosswalk.example/v1
     description: Production
@@ -250,6 +258,20 @@ paths:
     post:
       operationId: createAnalysis
       tags: [Analyses]
+      x-readme:
+        code-samples:
+          - language: curl
+            name: Run an analysis
+            code: |
+              curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
+                -H "Authorization: Bearer $CROSSWALK_KEY"
+          - language: curl
+            name: Override a failed gate
+            code: |
+              curl -X POST https://api.crosswalk.example/v1/targets/tgt_91aF/analyses \
+                -H "Authorization: Bearer $CROSSWALK_KEY" \
+                -H "Content-Type: application/json" \
+                -d '{"overrideGate": true, "overrideReason": "Warm referral; accepting the commute."}'
       summary: Run a gap analysis
       description: |
         Compares the Target's parsed requirements against current Inventory and produces typed Gaps.
@@ -351,6 +373,15 @@ paths:
     post:
       operationId: submitExcavation
       tags: [Gaps]
+      x-readme:
+        code-samples:
+          - language: curl
+            name: Answer an excavation question
+            code: |
+              curl -X POST https://api.crosswalk.example/v1/gaps/gap_5Qw2/excavations \
+                -H "Authorization: Bearer $CROSSWALK_KEY" \
+                -H "Content-Type: application/json" \
+                -d '{"answers":[{"questionId":"qst_01","answer":"Yes — I built HL7 interfaces to PACS and DICOM systems."}]}'
       summary: Answer excavation questions
       description: |
         For gaps typed `unarticulated`, Crosswalk returns targeted questions instead of a verdict.

@@ -16,11 +16,13 @@ on:
     paths:
       - 'openapi/**'
       - 'docs/**'
+      - 'changelog/**'
       - '.github/workflows/readme-sync.yml'
   pull_request:
     paths:
       - 'openapi/**'
       - 'docs/**'
+      - 'changelog/**'
   workflow_dispatch:
 
 jobs:
@@ -53,6 +55,13 @@ jobs:
             --key="${{ secrets.README_API_KEY }}" \
             --dry-run
 
+      - name: Dry-run changelog upload
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          npx --yes rdme@latest changelog upload ./changelog \
+            --key="${{ secrets.README_API_KEY }}" \
+            --dry-run
+
   publish:
     name: Publish to ReadMe
     needs: validate
@@ -76,4 +85,9 @@ jobs:
       - name: Upload guides
         run: |
           npx --yes rdme@latest docs upload ./docs \
+            --key="${{ secrets.README_API_KEY }}"
+
+      - name: Upload changelog
+        run: |
+          npx --yes rdme@latest changelog upload ./changelog \
             --key="${{ secrets.README_API_KEY }}"
