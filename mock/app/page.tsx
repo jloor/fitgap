@@ -6,11 +6,11 @@ export default function Home() {
         Every response here is derived from the OpenAPI definition, not hand-written fixtures.
       </p>
       <pre style={{ background: '#0f2b46', color: '#e8f3f2', padding: '1rem', borderRadius: 8, overflowX: 'auto' }}>
-{`curl https://<this-host>/api/v1/targets \\
+{`curl https://api.fitgap.org/v1/targets \\
   -H "Authorization: Bearer anything"`}
       </pre>
       <p>
-        Docs: <a href="https://docs.jonathanloor.com">docs.jonathanloor.com</a> ·
+        Docs: <a href="https://docs.fitgap.org">docs.fitgap.org</a> ·
         Source: <a href="https://github.com/jloor/fitgap">github.com/jloor/fitgap</a>
       </p>
       <p style={{ color: '#777', fontSize: '0.9rem' }}>
