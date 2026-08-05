@@ -52,6 +52,7 @@ jobs:
         run: |
           npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
+            --slug=openapi-fitgap.yaml \
             --dry-run
 
       - name: Dry-run guides upload
@@ -82,10 +83,29 @@ jobs:
 
       # --confirm-overwrite is required in CI: without it the command prompts,
       # and a prompt in a runner is a hang, not a failure.
+      #
+      # --slug pins the target resource. Without it rdme INFERS the slug by
+      # slugifying the whole relative path (`docs/api/petstore.json` becomes
+      # `docs-api-petstore.json`), so renaming or MOVING the spec silently
+      # creates a second API definition and orphans the first. That is exactly
+      # what the Crosswalk → Fitgap rename did: it left a stale "Crosswalk API"
+      # in the hub sidebar that no amount of pushing will remove. The orphan
+      # must be deleted in the ReadMe dashboard — rdme v10 has no delete
+      # command for API definitions.
+      #
+      # The value below is the CURRENTLY INFERRED slug, not a tidier one.
+      # `openapi/fitgap.yaml` infers `openapi-fitgap.yaml`, so that is what the
+      # live resource is called. Setting anything prettier here — `fitgap`, say
+      # — would point at a resource that does not exist and publish a THIRD
+      # definition. If this ever needs to change, rename the resource in the
+      # dashboard first, then change it here.
+      #
+      # With it pinned, the file may now be renamed or moved freely.
       - name: Upload OpenAPI definition
         run: |
           npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
+            --slug=openapi-fitgap.yaml \
             --confirm-overwrite
 
       - name: Upload guides
