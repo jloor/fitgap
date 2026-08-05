@@ -44,14 +44,23 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
   }
 
   // --- Simulated: the gate halts analysis. See "Understanding Gaps". ---
+  // Held outside the block so the response can echo what actually happened.
+  // Replaying the spec example verbatim meant an overridden request came back
+  // saying `gateOverridden: false` — the one place the mock contradicted the
+  // request it had just honoured.
+  let gate: { overridden: boolean; reason: string | null } | null = null
+
   if (req.method === 'POST' && match.template === '/targets/{targetId}/analyses') {
     let overridden = false
+    let reason: string | null = null
     try {
-      const body = (await req.json()) as { overrideGate?: boolean }
+      const body = (await req.json()) as { overrideGate?: boolean; overrideReason?: string }
       overridden = body?.overrideGate === true
+      reason = body?.overrideReason ?? null
     } catch {
       /* empty body is valid here */
     }
+    gate = { overridden, reason }
     if (match.params.targetId?.startsWith('tgt_fail') && !overridden) {
       return json(
         {
@@ -99,9 +108,23 @@ async function handle(req: NextRequest, ctx: { params: Promise<{ path: string[] 
     )
   }
 
-  return result.body === null && result.status === 204
+  // Responses are derived from the definition, not stored — but where the
+  // request carried meaning, the reply should reflect it rather than replay a
+  // fixture that disagrees. Only the fields the caller can actually observe as
+  // wrong are touched; everything else stays exactly as the spec documents it.
+  let body = result.body
+  if (gate && body && typeof body === 'object' && !Array.isArray(body)) {
+    body = {
+      ...(body as Record<string, unknown>),
+      targetId: match.params.targetId ?? (body as Record<string, unknown>).targetId,
+      gateOverridden: gate.overridden,
+      overrideReason: gate.reason,
+    }
+  }
+
+  return body === null && result.status === 204
     ? new NextResponse(null, { status: 204, headers: { 'X-Fitgap-Mock': 'true' } })
-    : json(result.body, result.status)
+    : json(body, result.status)
 }
 
 export const GET = handle
