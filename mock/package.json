@@ -10,7 +10,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "check-spec": "node scripts/sync-spec.mjs --check"
+    "check-spec": "node scripts/sync-spec.mjs --check",
+    "test": "node test/contract.mjs",
+    "test:ci": "next build && (next start -p 3000 & echo $! > /tmp/mock.pid) && npx --yes wait-on -t 60000 http://localhost:3000/api/v1/filters && node test/contract.mjs; code=$?; kill $(cat /tmp/mock.pid) 2>/dev/null; exit $code",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "next": "^15.0.0",

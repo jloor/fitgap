@@ -18,6 +18,27 @@ export default function Home() {
         <code> POST /targets/&#123;id&#125;/analyses</code> return <code>409 gate_failed</code> unless the body sets
         <code> overrideGate: true</code>; and <code>POST /gaps/&#123;id&#125;/excavations</code> always resolves the gap.
       </p>
+      <h2 style={{ fontSize: '1rem', marginTop: '2rem' }}>Failing on purpose</h2>
+      <p style={{ color: '#555', fontSize: '0.9rem' }}>
+        Most integration time is spent on the bad days, so they are reproducible here.
+        Send <code>X-Fitgap-Simulate</code> with <code>500</code>, <code>502</code>, <code>429</code>,
+        <code> 401</code>, <code>slow</code> or <code>timeout</code> — or use an id ending
+        <code> _500</code>, <code>_429</code>, <code>_slow</code>, <code>_timeout</code> when you
+        cannot set headers.
+      </p>
+      <ul style={{ color: '#555', fontSize: '0.9rem', paddingLeft: '1.1rem' }}>
+        <li>Requests need <code>Authorization: Bearer &lt;any-token&gt;</code>; a missing or malformed
+          header returns <code>401</code>.</li>
+        <li>Bodies are validated against the schema. A <code>422</code> lists every offending field by
+          JSON Pointer, e.g. <code>/sourceUrl</code>.</li>
+        <li>Unknown ids return <code>404</code> rather than someone else&rsquo;s example.</li>
+        <li>Collections take <code>?limit=</code> and <code>?cursor=</code>, and return a
+          <code> pagination.next</code> cursor plus a <code>Link</code> header.</li>
+        <li>Reads carry an <code>ETag</code>; send it back as <code>If-None-Match</code> for a
+          <code> 304</code>.</li>
+        <li>Every response carries <code>X-Request-Id</code>, echoed into error bodies. Send your own
+          and it is preserved.</li>
+      </ul>
     </main>
   )
 }

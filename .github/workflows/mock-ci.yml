@@ -1,0 +1,106 @@
+name: Mock API
+
+# The readme-sync workflow only triggers on openapi/**, docs/** and changelog/**,
+# so until now a change to the mock itself shipped with no CI at all — the one
+# part of this repo that is a running service was the one part nothing tested.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mock/**'
+      - '.github/workflows/mock-ci.yml'
+  pull_request:
+    paths:
+      - 'mock/**'
+      - 'openapi/**' # a spec change can break the contract without touching the mock
+      - '.github/workflows/mock-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  contract:
+    name: Typecheck, build, contract
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mock
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: mock/package-lock.json
+
+      - run: npm ci
+
+      # The mock serves a committed copy of the spec, because Vercel builds only
+      # see files under mock/. If the two ever diverge the mock starts lying,
+      # so this fails the build rather than letting it drift.
+      - name: Check the committed spec matches openapi/
+        run: node scripts/sync-spec.mjs --check
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build
+
+      # Contract tests run against the real built server, not a mocked fetch.
+      # A test that never starts the app cannot catch a routing or middleware
+      # fault, which is most of what actually breaks here.
+      - name: Start the mock
+        run: |
+          npx next start -p 3000 &
+          echo $! > /tmp/mock.pid
+          for i in $(seq 1 30); do
+            curl -sf -H 'Authorization: Bearer ci' http://localhost:3000/api/v1/filters >/dev/null && break
+            sleep 2
+          done
+
+      - name: Contract tests
+        run: node test/contract.mjs http://localhost:3000/api/v1
+
+      - name: Stop the mock
+        if: always()
+        run: kill "$(cat /tmp/mock.pid)" 2>/dev/null || true
+
+  # Runs only on PRs, against the Vercel preview rather than a local server —
+  # so the thing being tested is the artifact that would actually be promoted,
+  # including Vercel's routing and headers rather than just Next's.
+  preview:
+    name: Contract against the Vercel preview
+    if: github.event_name == 'pull_request'
+    needs: contract
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mock
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: mock/package-lock.json
+      - run: npm ci
+
+      - name: Wait for the Vercel preview deployment
+        id: preview
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.2
+        continue-on-error: true
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+          check_interval: 10
+
+      - name: Contract tests against the preview
+        if: steps.preview.outputs.url != ''
+        run: node test/contract.mjs "${{ steps.preview.outputs.url }}/api/v1"
+
+      - name: Note when no preview was found
+        if: steps.preview.outputs.url == ''
+        run: |
+          echo "No Vercel preview URL was reported; the local contract job above is authoritative for this run." >> "$GITHUB_STEP_SUMMARY"
