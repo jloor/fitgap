@@ -79,7 +79,7 @@ Resetting expectations honestly is a support skill, and your posting asks for it
 
 **Where I'd be learning:** your product surface, and the implementation patterns your enterprise customers actually run into. Weeks rather than months, but real.
 
-Thanks for reading this far. I enjoyed building it, which whatever you decide made the two weeks worth it.
+Thanks for reading this far. I enjoyed building it, which whatever you decide made the day worth it.
 
 Jonathan Loor
 [linkedin.com/in/jonathanloor](https://linkedin.com/in/jonathanloor) · forhire@jonathanloor.com
