@@ -69,6 +69,36 @@ library — so the arithmetic is auditable. It checks every text token against
 **all four** surfaces, not just the primary background, because the manila-folder
 tone is the hardest and the easiest to forget. It is wired to gate a commit.
 
+### Where the audit stops — and what got through
+
+It gates the **palette**, not the palette's **coverage**. It proves every colour
+pair in the token set is sound. It cannot prove those tokens are the colours
+actually on screen, and that distinction is not academic — two real defects lived
+in the gap, both on a green audit:
+
+- The **Bearer token placeholder** in the API Reference measured **1.76:1**. Its
+  colour never came from the palette; it was ReadMe's `#B8C0C6` default showing
+  through on a surface no rule targeted.
+- The **Recent Requests and Response panels** rendered `#FFFFFF` against `#F4ECD8`
+  parchment. Every one of those surfaces passed its own text-contrast check in
+  isolation. The defect was *between* surfaces, and a checker that only ever
+  compares text to its own background is structurally blind to it.
+
+Both were found by sampling pixels from a screenshot of the live hub, not by
+reading CSS or re-running the audit — the audit was green throughout and stayed
+green after the fixes, because the fixes added no new colours. Sections 11 and 12
+close these two instances.
+
+The general problem is open. Nothing here tests that a documented `.rm-` class
+still governs the surface you think it does, and a theme built on a vendor's
+class list is exposed to exactly that drift. The honest description of the current
+tooling is: **the colours are proven, their application is spot-checked.** A
+coverage test would render the hub and sample it, which is a different and larger
+piece of machinery than 128 lines of arithmetic.
+
+Worth saying rather than leaving to be discovered: knowing where your own gate
+stops is part of the gate.
+
 ---
 
 ## Platform fidelity
