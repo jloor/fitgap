@@ -1,0 +1,482 @@
+/* ==========================================================================
+   Vapor — teal minimal, near-monochrome
+   ReadMe custom CSS — paste into Appearance → Custom CSS & JavaScript → CSS.
+   Nothing goes in the HTML or JavaScript tabs: no webfonts, no JS.
+
+   GENERATED — do not hand-edit. Source: design/themes/{palettes,build}.py
+   Rebuild:  python3 design/themes/build.py
+
+   Every colour pair below is verified against WCAG 2.1 AA by palettes.py,
+   which the build refuses to run past. Text clears 4.5:1 on all four
+   surfaces; component borders clear 3:1 on the page.
+
+   Platform notes, each learned the hard way on a live hub:
+     * Tokens declare on `body`, never `:root` — ReadMe loads its own :root
+       AFTER custom CSS, so a :root override loses the cascade silently.
+     * Dark mode keys off BOTH `.ThemeContext_dark` (what the live DOM
+       carries) and `[data-color-mode="dark"]` (what the docs document).
+       Either alone is a bet, and losing it means dark mode is dead, not
+       degraded.
+     * Only documented `.rm-` classes are used. No hashed selectors.
+     * Form controls and platform panels are claimed explicitly. They render
+       platform white otherwise, and no palette audit can see that, because
+       those colours never came from the palette.
+   ========================================================================== */
+
+body {
+  color-scheme: light;
+
+  --th-bg:          #F5FBFB;
+  --th-bg-2:        #E6F4F2;
+  --th-bg-3:        #D2EAE6;
+  --th-bg-inset:    #F0F9F8;
+
+  --th-text:        #06201F;
+  --th-text-2:      #1E4644;
+  --th-muted:       #2F5F5C;
+
+  --th-accent:      #00736C;
+  --th-accent-2:    #00564F;
+  --th-on-accent:   #F5FBFB;
+
+  --th-border:      #B4D8D3;
+  --th-border-ui:   #529E93;
+
+  --th-ok:          #0F6B45;
+  --th-warn:        #8A5200;
+  --th-err:         #B3261E;
+  --th-info:        #00707F;
+
+  /* Code surfaces stay dark in BOTH modes. Taken from this theme's own dark
+     palette, so every pair here is already gated by the audit. */
+  --th-code-bg:     #0C1D19;
+  --th-code-text:   #DFF5F1;
+  --th-code-muted:  #84B9B1;
+  --th-code-border: #33695C;
+
+  /* Type: system stacks only. No @import, no HTML-tab dependency, no webfont
+     round-trip — a docs hub should paint text on the first frame. */
+  --th-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+             "Helvetica Neue", Arial, sans-serif;
+  --th-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+             "Liberation Mono", monospace;
+
+  --th-r:     4px;      /* one radius everywhere; futurism is not roundness */
+  --th-hair:  1px;
+  --th-gap:   1rem;
+  --th-t:     140ms cubic-bezier(.2, 0, 0, 1);
+}
+
+/* ReadMe's documented variables, bound to the palette. Every name here is on
+   ReadMe's published list — unverified names fail silently. */
+body {
+  --font-family:            var(--th-font);
+  --font-family-mono:       var(--th-mono);
+  --Header-background:      var(--th-bg-2);
+  --Header-border-color:    var(--th-border-ui);
+  --Header-tab-underline:   var(--th-accent);
+  --Sidebar-border-color:   var(--th-border-ui);
+  --tryit-background:       var(--th-accent);
+  --tryit-background-hover: var(--th-accent-2);
+  --tryit-color:            var(--th-on-accent);
+  --tryit-border-radius:    var(--th-r);
+  --transition-fast:        var(--th-t);
+}
+
+/* ---------------------------------------------------------------- surfaces */
+body {
+  background: var(--th-bg);
+  color: var(--th-text);
+  font-family: var(--th-font);
+}
+
+.rm-Header {
+  background: var(--th-bg-2) !important;
+  border-bottom: var(--th-hair) solid var(--th-border-ui) !important;
+}
+
+.rm-Sidebar {
+  background: var(--th-bg-2) !important;
+  border-right: var(--th-hair) solid var(--th-border-ui) !important;
+}
+
+.rm-Sidebar-heading {
+  color: var(--th-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.rm-Sidebar-list { list-style: none; }
+
+.rm-Sidebar-link {
+  color: var(--th-text-2);
+  border-left: 2px solid transparent;
+  transition: color var(--th-t), border-color var(--th-t);
+}
+.rm-Sidebar-link:hover { color: var(--th-text); }
+.rm-Sidebar-link[aria-current] {
+  color: var(--th-accent);
+  border-left-color: var(--th-accent);
+  font-weight: 600;
+}
+
+.rm-ToC {
+  border-left: var(--th-hair) solid var(--th-border-ui);
+  font-size: .8125rem;
+  color: var(--th-text-2);
+}
+
+/* The remaining documented classes. Claimed because they exist on ReadMe's
+   published list, not because a screenshot happened to show them — an
+   unclaimed surface renders platform white the moment a page uses it, and
+   that is a bug waiting for a page rather than a page waiting for a bug. */
+.rm-JumpTo {
+  background: var(--th-bg-inset) !important;
+  color: var(--th-text) !important;
+  border: var(--th-hair) solid var(--th-border-ui) !important;
+  border-radius: var(--th-r);
+}
+
+.rm-Header-top-link, .rm-Header-bottom-link, .rm-Header-top-link_login {
+  color: var(--th-text) !important;
+  transition: color var(--th-t);
+}
+.rm-Header-top-link:hover, .rm-Header-bottom-link:hover,
+.rm-Header-top-link_login:hover { color: var(--th-accent) !important; }
+
+.rm-Logo { color: var(--th-text); }
+/* Logos are artwork, not theme surfaces: no filter, no recolour. Only the
+   frame around one is ours. */
+.rm-Logo-img { border-radius: var(--th-r); }
+
+.rm-ParamContainer {
+  background: transparent !important;
+  border-color: var(--th-border-ui) !important;
+}
+
+/* ------------------------------------------------------------- the document */
+.rm-Guides, .rm-Guide, .rm-Reference, .rm-ReferenceMain {
+  background: transparent;
+  color: var(--th-text);
+  line-height: 1.65;
+}
+
+.rm-Guides h1, .rm-Guide h1, .rm-Reference h1, .rm-ReferenceMain h1,
+.rm-Guides h2, .rm-Guide h2, .rm-Reference h2, .rm-ReferenceMain h2,
+.rm-Guides h3, .rm-Guide h3, .rm-Reference h3, .rm-ReferenceMain h3,
+.rm-Guides h4, .rm-Guide h4 {
+  color: var(--th-text);
+  letter-spacing: -.015em;
+  font-weight: 650;
+  line-height: 1.2;
+}
+.rm-Guides h2, .rm-Guide h2 {
+  border-bottom: var(--th-hair) solid var(--th-border-ui);
+  padding-bottom: .35em;
+}
+
+.rm-Guides a, .rm-Guide a, .rm-Reference a, .rm-ReferenceMain a {
+  color: var(--th-accent);
+  text-underline-offset: .18em;
+  text-decoration-thickness: 1px;
+}
+.rm-Guides a:hover, .rm-Guide a:hover { color: var(--th-accent-2); }
+
+.rm-Guides code, .rm-Guide code, .rm-Reference code, .rm-ReferenceMain code {
+  font-family: var(--th-mono);
+  background: var(--th-bg-inset);
+  border: var(--th-hair) solid var(--th-border-ui);
+  border-radius: var(--th-r);
+  padding: .1em .35em;
+  font-size: .9em;
+}
+
+.rm-Guides pre, .rm-Guide pre, .rm-Reference pre, .rm-ReferenceMain pre {
+  background: var(--th-bg-inset) !important;
+  border: var(--th-hair) solid var(--th-border-ui);
+  border-radius: var(--th-r);
+}
+.rm-Guides pre code, .rm-Guide pre code { border: 0; background: transparent; }
+
+.rm-Guides blockquote, .rm-Guide blockquote {
+  border-left: 2px solid var(--th-accent);
+  background: var(--th-bg-2);
+  color: var(--th-text-2);
+  padding: .6rem .9rem;
+  border-radius: 0 var(--th-r) var(--th-r) 0;
+}
+
+.rm-Guides table, .rm-Guide table, .rm-Reference table, .rm-ReferenceMain table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.rm-Guides th, .rm-Guide th, .rm-Reference th, .rm-ReferenceMain th {
+  background: var(--th-bg-3);
+  color: var(--th-text);
+  text-align: left;
+  font-weight: 650;
+  border-bottom: var(--th-hair) solid var(--th-border-ui);
+  padding: .5rem .65rem;
+}
+.rm-Guides td, .rm-Guide td, .rm-Reference td, .rm-ReferenceMain td {
+  border-bottom: var(--th-hair) solid var(--th-border);
+  padding: .5rem .65rem;
+}
+
+hr { border: 0; border-top: var(--th-hair) solid var(--th-border-ui); }
+
+/* --------------------------------------------------- form controls
+   Measured on a live hub: these render platform near-white with a ~1.8:1
+   placeholder unless explicitly claimed. Background AND text are set
+   together — a placeholder colour is meaningless against an unknown
+   surface, and the dark palette's muted token on platform white fails. */
+.rm-ParamInput, .rm-ParamSelect, .rm-SearchToggle,
+.rm-Guides input, .rm-Guides select, .rm-Guides textarea,
+.rm-Reference input, .rm-Reference select, .rm-Reference textarea,
+.rm-ReferenceMain input, .rm-ReferenceMain select, .rm-ReferenceMain textarea {
+  background: var(--th-bg-inset) !important;
+  color: var(--th-text) !important;
+  border: var(--th-hair) solid var(--th-border-ui) !important;
+  border-radius: var(--th-r);
+  font-family: var(--th-font);
+}
+
+/* ::placeholder MUST be its own rule. One unknown selector invalidates an
+   entire list, which would silently take the block above down with it —
+   in exactly the browsers that needed it. opacity:1 because Firefox
+   applies a default that drags measured contrast below the computed value. */
+.rm-ParamInput::placeholder, .rm-ParamSelect::placeholder,
+.rm-SearchToggle::placeholder,
+.rm-Guides input::placeholder, .rm-Guides textarea::placeholder,
+.rm-Reference input::placeholder, .rm-Reference textarea::placeholder,
+.rm-ReferenceMain input::placeholder, .rm-ReferenceMain textarea::placeholder {
+  color: var(--th-muted) !important;
+  opacity: 1;
+}
+
+/* ------------------------------------------------- platform panels
+   ReadMe's stylesheet outranks custom CSS on these, so !important is
+   required rather than preferred. Each was sampled from a screenshot and
+   found to be a platform default (#FFFFFF / #F9FAFB) on a themed page. */
+.rm-APILogsTable, .rm-APILogInfo,
+.rm-PlaygroundResponse, .rm-APIResponseSchemaPicker {
+  background: var(--th-bg-inset) !important;
+  color: var(--th-text) !important;
+  border-color: var(--th-border-ui) !important;
+  border-radius: var(--th-r);
+}
+
+.rm-APISectionHeader, .rm-Pagination {
+  background: var(--th-bg-2) !important;
+  color: var(--th-text) !important;
+  border-color: var(--th-border-ui) !important;
+}
+
+.rm-APILogsTable th {
+  background: var(--th-bg-3) !important;
+  color: var(--th-text) !important;
+}
+.rm-APILogsTable td {
+  background: transparent !important;
+  color: var(--th-text) !important;
+  border-color: var(--th-border) !important;
+}
+
+.rm-LanguageButton, .rm-LanguageButton-more {
+  background: transparent !important;
+  color: var(--th-text-2) !important;
+  border: var(--th-hair) solid var(--th-border-ui) !important;
+  border-radius: var(--th-r);
+  transition: background var(--th-t), color var(--th-t);
+}
+.rm-LanguageButton:hover, .rm-LanguageButton-more:hover {
+  background: var(--th-bg-3) !important;
+  color: var(--th-text) !important;
+}
+
+.rm-TryIt {
+  background: var(--th-accent) !important;
+  color: var(--th-on-accent) !important;
+  border: 0 !important;
+  border-radius: var(--th-r);
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.rm-TryIt:hover { background: var(--th-accent-2) !important; }
+
+/* -------------------------------------------------------------- code
+   Dark in BOTH light and dark mode, deliberately. ReadMe's syntax
+   highlighter ships token colours tuned for a dark background and exposes
+   no documented hook to restyle them; on a light surface they measured
+   1.0-1.7:1 — worse than unstyled. Handing them the background they were
+   built for is the only fix that does not depend on undocumented internals.
+
+   The values come from this theme's own dark palette, so the code block
+   reads as part of the theme rather than a foreign inset, and every pair is
+   already covered by the audit.
+
+   SCOPED GLOBALLY, not to documented containers. Recipes, changelog entries
+   and custom pages all render code outside .rm-Guides, and the no-white reset
+   blanks whatever dark panel the platform put there — leaving dark-theme
+   syntax colours on a light page at 1.25:1. `pre` plus its immediate wrapper
+   (`:has(> pre)`) catches the code block wherever it appears, and the wrapper
+   also takes the code foreground so a panel title inside it stays legible. */
+.rm-PlaygroundRequest,
+pre,
+:where(div, figure, section, aside):has(> pre) {
+  background-color: var(--th-code-bg) !important;
+  color: var(--th-code-text) !important;
+  border: var(--th-hair) solid var(--th-code-border) !important;
+  border-radius: var(--th-r);
+}
+
+/* NO NESTED CORNERS. An inner rounded box inside a rounded panel reads as a
+   corner that failed to render — the border appears to start curving and
+   then stop. The outer panel owns the radius; everything inside it is flush
+   and borderless. */
+.rm-PlaygroundRequest pre,
+.rm-PlaygroundRequest code,
+.rm-PlaygroundResponse pre,
+.rm-PlaygroundResponse code,
+.rm-Guides pre code, .rm-Guide pre code,
+.rm-Reference pre code, .rm-ReferenceMain pre code {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: inherit;
+}
+
+/* Line-number gutter, if the platform renders one. */
+.rm-PlaygroundRequest pre .linenumber,
+.rm-Guides pre .linenumber, .rm-Guide pre .linenumber {
+  color: var(--th-code-muted) !important;
+}
+
+/* --------------------------------------------------------- NO WHITE
+   A design directive, and the only strategy that does not require knowing
+   ReadMe's private class names.
+
+   Enumerating surfaces to theme is a losing game: every page introduces a
+   component nobody claimed, and it renders platform white. So this inverts
+   it. Nothing inside the hub paints its own background; the surfaces this
+   theme owns are painted back, explicitly, above.
+
+   The reset is wrapped in :where(), which contributes ZERO specificity. So
+   `.rm-PlaygroundRequest` (0,1,0) still beats `body :where(div)` (0,0,1) and
+   every painted surface above survives untouched — no !important arms race,
+   no ordering dependency. Remove the :where() and this rule would flatten
+   the entire theme.
+
+   background-color only. Images, logos, SVG and gradients are untouched.
+
+   TWO EXCLUSIONS, both learned by breaking it:
+
+   `!important` outranks INLINE styles, so an element filled with the accent
+   via style="background:…" went transparent while keeping its on-accent
+   foreground — near-white text on a near-white surface, invisible. Anything
+   carrying its own inline background is now left alone.
+
+   `span` is out of the list entirely, and badge/pill/tag/status/method class
+   fragments are excluded. Those are filled affordances whose whole job is a
+   coloured background with light text on it; blanking them is exactly the
+   failure above. They also rarely produce white boxes, so the reset loses
+   nothing by skipping them. */
+body :where(div, section, article, aside, header, footer, main, nav,
+            ul, ol, li, table, thead, tbody, tfoot, tr, td, th,
+            form, fieldset, dl, dt, dd, p, label, figure, figcaption):where(
+       :not([style*="background"], [class*="badge" i], [class*="pill" i],
+            [class*="tag" i], [class*="chip" i], [class*="status" i],
+            [class*="method" i])) {
+  background-color: transparent !important;
+}
+
+/* Overlays are the exception that makes the rule safe. A transparent menu or
+   dialog paints its text over the page beneath it, which is worse than
+   platform white. These are ARIA roles, not class names, so they are as
+   stable as the accessibility tree. */
+[role="menu"], [role="listbox"], [role="dialog"], [role="tooltip"],
+[role="alertdialog"], dialog, [popover] {
+  background-color: var(--th-bg-inset) !important;
+  border: var(--th-hair) solid var(--th-border-ui) !important;
+  border-radius: var(--th-r);
+  box-shadow: 0 8px 24px rgb(0 0 0 / .28);
+}
+
+/* Selected / current items lost their platform fill with the reset, so the
+   affordance is painted back from the palette. aria-current and aria-selected
+   are semantics, not styling hooks that can rotate away. */
+[aria-current="page"], [aria-selected="true"] {
+  background-color: var(--th-bg-3) !important;
+  color: var(--th-text) !important;
+}
+
+/* Skeleton loaders read as platform grey. Tint them so an empty widget looks
+   like part of the design rather than a half-loaded page. */
+[class*="skeleton" i], [aria-busy="true"] {
+  background-color: var(--th-bg-3) !important;
+}
+
+/* ------------------------------------------------------------ accessibility */
+:focus-visible {
+  outline: 2px solid var(--th-accent);
+  outline-offset: 2px;
+  border-radius: var(--th-r);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  body { --th-border: var(--th-border-ui); }
+}
+
+@media print {
+  .rm-Sidebar, .rm-Header, .rm-TryIt { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .rm-Guides a::after, .rm-Guide a::after {
+    content: " (" attr(href) ")";
+    font-size: .85em;
+  }
+}
+
+
+/* --------------------------------------------------------------- dark mode */
+body.ThemeContext_dark,
+[data-color-mode="dark"] body {
+  color-scheme: dark;
+
+  --th-bg:          #06120F;
+  --th-bg-2:        #0C1D19;
+  --th-bg-3:        #132B25;
+  --th-bg-inset:    #040C0A;
+
+  --th-text:        #DFF5F1;
+  --th-text-2:      #A9D8D0;
+  --th-muted:       #84B9B1;
+
+  --th-accent:      #35E0C8;
+  --th-accent-2:    #7CF0DE;
+  --th-on-accent:   #06120F;
+
+  --th-border:      #1D3C35;
+  --th-border-ui:   #33695C;
+
+  --th-ok:          #4CD68A;
+  --th-warn:        #E8C04A;
+  --th-err:         #FF7E85;
+  --th-info:        #35E0C8;
+
+  /* Code surfaces stay dark in BOTH modes. Taken from this theme's own dark
+     palette, so every pair here is already gated by the audit. */
+  --th-code-bg:     #0C1D19;
+  --th-code-text:   #DFF5F1;
+  --th-code-muted:  #84B9B1;
+  --th-code-border: #33695C;
+}

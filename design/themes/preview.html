@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme cycler — five candidates</title>
+
+<!-- All five load; four are disabled at a time. Same files that go in the
+     CSS panel, byte for byte, so this is not an approximation. -->
+<link rel="stylesheet" data-theme="blueprint" href="./dist/blueprint.css">
+<link rel="stylesheet" data-theme="carbon"    href="./dist/carbon.css" disabled>
+<link rel="stylesheet" data-theme="aurora"    href="./dist/aurora.css" disabled>
+<link rel="stylesheet" data-theme="signal"    href="./dist/signal.css" disabled>
+<link rel="stylesheet" data-theme="vapor"     href="./dist/vapor.css" disabled>
+
+<style>
+  /* Harness chrome only. Styles nothing the themes style, so the preview
+     stays honest. Uses the themes' own tokens so it never fights them. */
+  .shell { max-width: 860px; margin: 0 auto; padding: 5.5rem 1.5rem 4rem; }
+  .bar {
+    position: fixed; inset: 0 0 auto 0; z-index: 20;
+    display: flex; gap: .4rem; flex-wrap: wrap; align-items: center;
+    padding: .5rem .75rem;
+    background: var(--th-bg-2); border-bottom: 1px solid var(--th-border-ui);
+    font: 500 .8125rem/1 var(--th-font);
+  }
+  .bar button {
+    padding: .4rem .7rem; border-radius: 4px; cursor: pointer;
+    background: transparent; color: var(--th-text-2);
+    border: 1px solid var(--th-border-ui); font: inherit;
+  }
+  .bar button[aria-pressed="true"] {
+    background: var(--th-accent); color: var(--th-on-accent);
+    border-color: var(--th-accent); font-weight: 700;
+  }
+  .bar .sep { width: 1px; height: 20px; background: var(--th-border-ui); margin: 0 .35rem; }
+  .bar .read { margin-left: auto; color: var(--th-muted); font-family: var(--th-mono); font-size: .75rem; }
+  .fake-panel {
+    background: var(--th-bg-inset); border: 1px solid var(--th-border-ui);
+    border-radius: 4px; padding: 1rem; margin: 1rem 0;
+  }
+  .swatches { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+  .sw { flex: 1 1 120px; padding: .55rem; border-radius: 4px; border: 1px solid var(--th-border-ui);
+        font-family: var(--th-mono); font-size: .7rem; }
+  label.f { display: block; margin: .75rem 0 .25rem; color: var(--th-text-2); font-size: .8125rem; }
+  input.f { width: 100%; padding: .5rem .6rem; }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span id="themes" role="group" aria-label="Theme"></span>
+  <span class="sep"></span>
+  <span id="modes" role="group" aria-label="Colour mode"></span>
+  <span class="read" id="read"></span>
+</div>
+
+<div class="shell rm-Guides">
+  <h1>Get the user's gate filters</h1>
+  <p>Five candidates, cycled locally so a decision costs a keypress instead of a
+  paste, a save, a hard reload and a screenshot. Press <strong>1–5</strong> to
+  switch theme, <strong>L / D / S</strong> for light, dark and system.</p>
+
+  <h2>Surfaces that were rendering platform white</h2>
+  <p>The panel and the inputs below are the real failure sites from the live hub:
+  a credentials field at 1.76:1 and response panels at <code>#FFFFFF</code> on a
+  themed page. Every theme here claims them explicitly.</p>
+
+  <div class="fake-panel">
+    <strong>Recent Requests</strong>
+    <table>
+      <thead><tr><th>Time</th><th>Status</th><th>User agent</th></tr></thead>
+      <tbody>
+        <tr><td>13:41:59</td><td>200</td><td>rdme/10.9.4</td></tr>
+        <tr><td>13:45:57</td><td>200</td><td>curl/8.6.0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <label class="f" for="tok">Bearer</label>
+  <input class="f rm-ParamInput" id="tok" placeholder="token">
+  <label class="f" for="url">URL</label>
+  <input class="f rm-ParamInput" id="url" value="https://api.fitgap.org/v1/filters">
+
+  <div class="swatches">
+    <div class="sw" style="background:var(--th-bg-2);color:var(--th-text)">text</div>
+    <div class="sw" style="background:var(--th-bg-2);color:var(--th-muted)">muted</div>
+    <div class="sw" style="background:var(--th-bg-2);color:var(--th-accent)">accent</div>
+    <div class="sw" style="background:var(--th-bg-2);color:var(--th-ok)">ok</div>
+    <div class="sw" style="background:var(--th-bg-2);color:var(--th-err)">err</div>
+    <div class="sw" style="background:var(--th-accent);color:var(--th-on-accent)">on-accent</div>
+  </div>
+
+  <h3>Code</h3>
+  <pre><code>curl https://api.fitgap.org/v1/filters \
+  -H "Authorization: Bearer $FITGAP_TOKEN"</code></pre>
+  <p>Inline <code>--slug=openapifitgap.yaml</code> reads at the same weight as body text.</p>
+
+  <blockquote>Contrast is gated before the stylesheet is written. The build refuses
+  to emit a palette that fails.</blockquote>
+
+  <p><a href="#">A link, at accent</a> — and <a href="#">another after hover</a>.</p>
+</div>
+
+<script>
+  const THEMES = ['blueprint','carbon','aurora','signal','vapor'];
+  const MODES  = ['light','dark','system'];
+  const sheets = [...document.querySelectorAll('link[data-theme]')];
+  const sysDark = matchMedia('(prefers-color-scheme: dark)');
+  let theme = localStorage.getItem('tc-theme') || 'blueprint';
+  let mode  = localStorage.getItem('tc-mode')  || 'system';
+
+  const mk = (host, items, get, set) => items.forEach((it, i) => {
+    const b = document.createElement('button');
+    b.textContent = (host.id === 'themes' ? (i + 1) + ' ' : '') + it;
+    b.onclick = () => set(it);
+    b.dataset.v = it;
+    host.append(b);
+  });
+  const tHost = document.getElementById('themes'), mHost = document.getElementById('modes');
+  mk(tHost, THEMES, () => theme, t => { theme = t; apply(); });
+  mk(mHost, MODES,  () => mode,  m => { mode  = m; apply(); });
+
+  function apply() {
+    sheets.forEach(s => s.disabled = s.dataset.theme !== theme);
+    const dark = mode === 'dark' || (mode === 'system' && sysDark.matches);
+    document.body.classList.toggle('ThemeContext_dark', dark);
+    document.documentElement.setAttribute('data-color-mode', mode);
+    [...tHost.children].forEach(b => b.setAttribute('aria-pressed', b.dataset.v === theme));
+    [...mHost.children].forEach(b => b.setAttribute('aria-pressed', b.dataset.v === mode));
+    document.getElementById('read').textContent =
+      `${theme} · ${mode}${mode === 'system' ? ` → OS ${sysDark.matches ? 'dark' : 'light'}` : ''}`;
+    try { localStorage.setItem('tc-theme', theme); localStorage.setItem('tc-mode', mode); } catch (e) {}
+  }
+
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, textarea')) return;
+    const n = THEMES[+e.key - 1];
+    if (n) { theme = n; apply(); }
+    const m = { l: 'light', d: 'dark', s: 'system' }[e.key.toLowerCase()];
+    if (m) { mode = m; apply(); }
+  });
+  sysDark.addEventListener('change', () => mode === 'system' && apply());
+  apply();
+</script>
+</body>
+</html>
