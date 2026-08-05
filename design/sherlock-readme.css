@@ -619,3 +619,68 @@ body.ThemeContext_dark .rm-Header,
 [data-color-mode="dark"] body .rm-Header {
   background: var(--sh-color-bg-inset) !important;
 }
+
+/* ==========================================================================
+   11. FORM CONTROLS — the surfaces the palette never reached
+   --------------------------------------------------------------------------
+   Found by measuring a screenshot of the live hub, not by reading the CSS.
+   The Bearer token field was still ReadMe stock #F9FAFB with a #B8C0C6
+   placeholder — 1.76:1. The search placeholder measured 2.11:1. Both well
+   under the 4.5:1 floor the rest of this theme holds.
+
+   The audit did not catch it and could not: sherlock-audit.py proves the
+   PALETTE is sound, not that the palette is APPLIED. These colours never came
+   from the palette at all — they were defaults showing through on surfaces no
+   rule targeted. A green audit and an unreadable input are compatible states.
+
+   The background is set here as well as the text colour, and that is not
+   scope creep. A placeholder colour is only meaningful against a known
+   surface: leaving the field at ReadMe's near-white would make the DARK
+   theme's muted token (#A2896B) fail badly on it. Fixing the pair is the only
+   way to fix either. Both tokens are already gated by the audit against all
+   four surfaces, so this adds no new colours to verify.
+   ========================================================================== */
+.rm-ParamInput,
+.rm-ParamSelect,
+.rm-SearchToggle,
+.rm-Guides input, .rm-Guides select, .rm-Guides textarea,
+.rm-Guide  input, .rm-Guide  select, .rm-Guide  textarea,
+.rm-Reference input, .rm-Reference select, .rm-Reference textarea,
+.rm-ReferenceMain input, .rm-ReferenceMain select, .rm-ReferenceMain textarea {
+  background: var(--sh-color-bg-inset);
+  color: var(--sh-color-text-primary);
+  border: var(--sh-border-thin) solid var(--sh-color-border-ui);
+  border-radius: var(--sh-radius-sm);
+  font-family: var(--sh-font-ui);
+}
+
+/* ::placeholder MUST live in its own rule. A selector list is invalidated in
+   full if any one selector in it is unknown to the browser — grouping this
+   with the block above would silently kill the field styling too, in exactly
+   the browsers that most needed it. Same reason the vendor-prefixed variants
+   below are separate rules rather than one comma-joined list.
+
+   opacity:1 is load-bearing: Firefox applies a default placeholder opacity
+   that quietly drags the measured contrast below the computed value. */
+.rm-ParamInput::placeholder,
+.rm-ParamSelect::placeholder,
+.rm-SearchToggle::placeholder,
+.rm-Guides input::placeholder, .rm-Guides textarea::placeholder,
+.rm-Guide  input::placeholder, .rm-Guide  textarea::placeholder,
+.rm-Reference input::placeholder, .rm-Reference textarea::placeholder,
+.rm-ReferenceMain input::placeholder, .rm-ReferenceMain textarea::placeholder {
+  color: var(--sh-color-text-muted);
+  opacity: 1;
+}
+
+.rm-SearchToggle::-webkit-input-placeholder,
+.rm-ParamInput::-webkit-input-placeholder {
+  color: var(--sh-color-text-muted);
+  opacity: 1;
+}
+
+.rm-SearchToggle::-moz-placeholder,
+.rm-ParamInput::-moz-placeholder {
+  color: var(--sh-color-text-muted);
+  opacity: 1;
+}
