@@ -52,7 +52,7 @@ jobs:
         run: |
           npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
-            --slug=openapi-fitgap.yaml \
+            --slug=openapifitgap.yaml \
             --dry-run
 
       - name: Dry-run guides upload
@@ -93,19 +93,26 @@ jobs:
       # must be deleted in the ReadMe dashboard — rdme v10 has no delete
       # command for API definitions.
       #
-      # The value below is the CURRENTLY INFERRED slug, not a tidier one.
-      # `openapi/fitgap.yaml` infers `openapi-fitgap.yaml`, so that is what the
-      # live resource is called. Setting anything prettier here — `fitgap`, say
-      # — would point at a resource that does not exist and publish a THIRD
-      # definition. If this ever needs to change, rename the resource in the
-      # dashboard first, then change it here.
+      # The value below is READ FROM CI LOGS, not derived from the docs, and
+      # the difference is not academic. rdme's help says the slug is the
+      # relative path slugified, giving `openapi-fitgap.yaml`. The actual live
+      # resource is `openapifitgap.yaml` — the separator is STRIPPED, not
+      # replaced with a hyphen. Publishing the documented-looking value created
+      # a third API definition on 2026-08-05 (run 31011465734) rather than
+      # updating the real one.
+      #
+      # Do not "correct" this to something that looks tidier or matches the
+      # docs. Confirm any change against a real run first:
+      #   gh run view <id> --log | grep 'successfully'
+      # which prints the slug and says created vs updated. "created" on a spec
+      # that already exists means the slug is wrong.
       #
       # With it pinned, the file may now be renamed or moved freely.
       - name: Upload OpenAPI definition
         run: |
           npx --yes rdme@latest openapi upload openapi/fitgap.yaml \
             --key="${{ secrets.README_API_KEY }}" \
-            --slug=openapi-fitgap.yaml \
+            --slug=openapifitgap.yaml \
             --confirm-overwrite
 
       - name: Upload guides
