@@ -684,3 +684,80 @@ body.ThemeContext_dark .rm-Header,
   color: var(--sh-color-text-muted);
   opacity: 1;
 }
+
+/* ==========================================================================
+   12. PLATFORM PANELS — the white cards on a parchment page
+   --------------------------------------------------------------------------
+   Measured on the live hub: Recent Requests and the Response panel were both
+   #FFFFFF, and the credential/URL fields #F9FAFB, sitting on #F4ECD8
+   parchment. Individually each surface passed its own text-contrast check;
+   together they read as unfinished, because the mismatch is between SURFACES
+   rather than within one. Nothing in an audit that checks text-on-background
+   can see that.
+
+   WHY !important HERE AND NOWHERE ELSE.
+   §10 established that ReadMe's own stylesheet outranks this theme on chrome
+   surfaces — the header stayed stock white despite a correct variable. These
+   panels measured as platform defaults for the same reason. The !important is
+   evidence-led, not precautionary: each surface below was sampled from a
+   screenshot and found to be ReadMe's colour, not ours. If a future paste
+   shows one of them already themed, drop the flag on that line.
+
+   ALL SELECTORS ARE FROM READ ME'S PUBLISHED CLASS LIST. Which panel each
+   class actually governs was inferred from the docs, not from the DOM, so if
+   a surface stays white after this, inspect it and match the class rather
+   than reaching for a hashed name — that is the trade §4 of the runbook warns
+   about, and it is not worth making here.
+   ========================================================================== */
+.rm-APILogsTable,
+.rm-APILogInfo,
+.rm-PlaygroundRequest,
+.rm-PlaygroundResponse,
+.rm-APIResponseSchemaPicker {
+  background: var(--sh-color-bg-inset) !important;
+  color: var(--sh-color-text-primary);
+  border-color: var(--sh-color-border-ui);
+}
+
+/* Section headers and pagination are chrome, not content: one step up the
+   surface scale so they read as a frame around the panel rather than part of
+   it. bg-secondary is the same tone the sidebar already uses, which is what
+   makes the page feel like one document instead of three. */
+.rm-APISectionHeader,
+.rm-Pagination {
+  background: var(--sh-color-bg-secondary) !important;
+  color: var(--sh-color-text-primary);
+  border-color: var(--sh-color-border-ui);
+}
+
+/* Language buttons sit above the request panel and were inheriting platform
+   white. Border rather than fill for the inactive state, so the active one
+   can carry the only filled surface in the row. */
+.rm-LanguageButton {
+  background: transparent !important;
+  color: var(--sh-color-text-secondary);
+  border: var(--sh-border-thin) solid var(--sh-color-border-ui);
+  border-radius: var(--sh-radius-sm);
+  font-family: var(--sh-font-ui);
+}
+
+.rm-LanguageButton:hover,
+.rm-LanguageButton-more:hover {
+  background: var(--sh-color-bg-inset) !important;
+  color: var(--sh-color-text-primary);
+}
+
+/* Tables inside the log panel: the platform draws white rows. Alternating
+   parchment tones match the ledger ruling §8 already applies to content
+   tables, so the request history reads as the same document. */
+.rm-APILogsTable th {
+  background: var(--sh-color-bg-secondary) !important;
+  color: var(--sh-color-text-primary);
+  font-family: var(--sh-font-display);
+}
+
+.rm-APILogsTable td {
+  background: transparent !important;
+  color: var(--sh-color-text-primary);
+  border-color: var(--sh-color-border);
+}
