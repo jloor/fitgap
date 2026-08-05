@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Case Files — Sherlock Theme Preview</title>
+
+<!-- Loads the EXACT stylesheet destined for ReadMe's panel, so what you see
+     here is what the hub will render. The toggle applies .ThemeContext_dark —
+     ReadMe's real dark-mode class — rather than a made-up data attribute, so
+     dark mode is exercised for real. -->
+<link rel="stylesheet" href="./sherlock-readme.css">
+
+<style>
+  /* Preview chrome ONLY — deliberately minimal, and deliberately styles
+     nothing the theme styles. Tables, headings, code, lists and rules are all
+     left to sherlock-readme.css so this page is an honest preview. */
+  .preview-shell {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: var(--sh-space-2xl) var(--sh-space-lg) var(--sh-space-3xl);
+  }
+  .preview-toggle {
+    position: fixed; top: var(--sh-space-md); right: var(--sh-space-md); z-index: 10;
+    background: var(--sh-color-bg-secondary);
+    border: var(--sh-border-default) solid var(--sh-color-border-strong);
+    border-radius: var(--sh-radius-pill);
+    padding: var(--sh-space-xs) var(--sh-space-md);
+    font-family: var(--sh-font-ui); font-size: var(--sh-fs-sm);
+    color: var(--sh-color-text-primary); cursor: pointer;
+  }
+  .swatches { display: flex; flex-wrap: wrap; gap: var(--sh-space-sm); margin: var(--sh-space-lg) 0; }
+  .swatch {
+    flex: 1 1 130px; padding: var(--sh-space-sm); border-radius: var(--sh-radius-sm);
+    border: 1px solid var(--sh-color-border-ui);
+    font-family: var(--sh-font-mono); font-size: var(--sh-fs-xs); line-height: 1.5;
+  }
+  .label {
+    font-family: var(--sh-font-ui); font-style: italic;
+    font-size: var(--sh-fs-sm); color: var(--sh-color-text-secondary);
+  }
+</style>
+</head>
+
+<body>
+<button class="preview-toggle" id="toggle" aria-pressed="false">🌙 Toggle the Fog</button>
+
+<div class="preview-shell rm-Guides">
+
+  <h1>The Case Files of Fitgap</h1>
+
+  <p>The system draws upon the sitting-room at 221B Baker Street, where gas-lamps
+  cast warm amber light across walls lined with case files and reference books.
+  Every colour below has been put to the test, and a good many were found
+  wanting — <em>you see, but you do not observe.</em></p>
+
+  <p class="label">↑ That opening paragraph carries the Strand drop cap. It is
+  the first <code>&lt;p&gt;</code> in the container, styled with
+  <code>::first-letter</code> — no extra markup required of the author.</p>
+
+  <hr class="strand-rule">
+
+  <h2>The Evidence</h2>
+
+  <p>Twenty of forty-five colour pairs failed WCAG AA as originally specified.
+  Each was repaired by moving <strong>only</strong> OKLCH lightness, holding hue
+  and chroma fixed, so brass is still brass and sealing wax is still sealing
+  wax.</p>
+
+  <table>
+    <thead><tr><th>Token</th><th>Was</th><th>Now</th><th>Ratio</th></tr></thead>
+    <tbody>
+      <tr><td>text-muted (light)</td><td>#8B7355</td><td>#654E31</td><td>2.63 → 4.57</td></tr>
+      <tr><td>warning (light)</td><td>#B8860B</td><td>#764800</td><td>2.40 → 4.56</td></tr>
+      <tr><td>fog (light)</td><td>#6B7B8D</td><td>#455466</td><td>3.65 → 4.53</td></tr>
+      <tr><td>success (light)</td><td>#4A6B3A</td><td>#3B5B2B</td><td>3.56 → 4.52</td></tr>
+      <tr><td>accent (dark)</td><td>#C45050</td><td>#DE6766</td><td>3.33 → 4.51</td></tr>
+      <tr><td>border-strong (dark)</td><td>#6B5235</td><td>#785F41</td><td>2.49 → 3.03</td></tr>
+    </tbody>
+  </table>
+
+  <p class="label">↑ Ledger ruling: double rules top and bottom, alternating rows,
+  Besley headers. Styled as <code>table</code> inside <code>.rm-Guides</code> —
+  semantic HTML, not a guessed <code>.rm-</code> class name.</p>
+
+  <div class="swatches">
+    <div class="swatch" style="background:var(--sh-color-bg-secondary);color:var(--sh-color-text-primary)">text-primary</div>
+    <div class="swatch" style="background:var(--sh-color-bg-secondary);color:var(--sh-color-text-muted)">text-muted</div>
+    <div class="swatch" style="background:var(--sh-color-bg-secondary);color:var(--sh-color-accent)">accent</div>
+    <div class="swatch" style="background:var(--sh-color-bg-secondary);color:var(--sh-color-brass-text)">brass-text</div>
+    <div class="swatch" style="background:var(--sh-color-bg-secondary);color:var(--sh-color-fog)">fog</div>
+    <div class="swatch" style="background:var(--sh-color-accent);color:var(--sh-color-on-accent)">on-accent</div>
+  </div>
+
+  <div class="strand-flourish"><span>§</span></div>
+
+  <h2>The Methods</h2>
+
+  <p>HTTP verbs as wax stamps — outlined rather than filled, so each reuses a
+  colour pair already verified as text-on-surface. A filled badge would need its
+  own on-fill audit for every verb.</p>
+
+  <p>
+    <span class="method method--get">GET</span>
+    <span class="method method--post">POST</span>
+    <span class="method method--put">PUT</span>
+    <span class="method method--patch">PATCH</span>
+    <span class="method method--delete">DELETE</span>
+  </p>
+
+  <h3>Endpoint notes</h3>
+
+  <dl>
+    <dt>/v1/targets</dt>
+    <dd>The subject under investigation. Returns the full dossier.</dd>
+    <dt>/v1/analyses/{id}/gaps</dt>
+    <dd>Where the evidence falls short — the gaps themselves.</dd>
+    <dt>/v1/gaps/{id}/excavations</dt>
+    <dd>Digging further into a single discrepancy.</dd>
+  </dl>
+
+  <p class="label">↑ Definition lists as case notes: Besley terms, ruled left
+  border on each definition.</p>
+
+  <div class="marginalia">
+    A note in the margin, as Watson would have added it — brass-ruled, italic,
+    set in IM Fell English.
+  </div>
+
+  <hr class="strand-rule">
+
+  <h2>The Documents</h2>
+
+  <div class="case-file case-file--classified">
+    <p><strong>Case Reference:</strong> No. 221B/1895/003</p>
+    <p>A case file with a sealing-wax spine and a stamp rotated eight degrees off
+    true. The stamp is generated content, so assistive technology skips it.</p>
+  </div>
+
+  <blockquote>
+    "You see, but you do not observe. The distinction is clear."
+    <footer>— Sherlock Holmes, <em>A Scandal in Bohemia</em> (1891)</footer>
+  </blockquote>
+
+  <div class="telegram">
+    FROM: SCOTLAND YARD<br>
+    CASE URGENT STOP<br>
+    REQUEST IMMEDIATE CONSULTATION STOP<br>
+    COME AT ONCE STOP
+  </div>
+
+  <h3>The typewriter</h3>
+
+  <pre><code>curl https://api.fitgap.org/v1/targets \
+  -H "Authorization: Bearer $FITGAP_TOKEN"</code></pre>
+
+  <p class="label">↑ Code blocks carry a brass left rule. Try
+  <strong>File → Print</strong> to see the print stylesheet: texture and
+  animation stripped, link targets surfaced, case files kept whole across page
+  breaks.</p>
+
+  <hr class="strand-rule">
+
+  <p style="text-align:center"><span class="wax-seal">SH</span></p>
+
+  <p class="label" style="text-align:center">The header above breathes on an
+  eight-second cycle — opacity only, and disabled entirely under
+  <code>prefers-reduced-motion</code>.</p>
+</div>
+
+<script>
+  // Applies ReadMe's real dark-mode class so the preview matches the hub.
+  const btn = document.getElementById('toggle');
+  btn.addEventListener('click', () => {
+    const dark = document.body.classList.toggle('ThemeContext_dark');
+    btn.setAttribute('aria-pressed', String(dark));
+    btn.textContent = dark ? '🔆 Light the Lamps' : '🌙 Toggle the Fog';
+  });
+</script>
+</body>
+</html>

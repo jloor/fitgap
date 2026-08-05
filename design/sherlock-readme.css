@@ -1,0 +1,621 @@
+/* ==========================================================================
+   🕵️  THE SHERLOCK HOLMES THEME — 221B Baker Street, 1895
+   Fitgap docs hub · paste into Appearance → Custom CSS & JavaScript → CSS
+   --------------------------------------------------------------------------
+   Colours verified by design/sherlock-audit.py — that script exits non-zero
+   if any pair regresses, so re-run it after any colour edit:
+
+       python3 design/sherlock-audit.py
+
+   TWO TOKENS ARE DELIBERATELY SPLIT, and this matters:
+
+     brass  — the original #B8860B is 2.76:1 on parchment. Darkening it to pass
+              turns brass into olive and kills the gas-lamp quality. So brass
+              stays brass for DECORATION (rules, glows, large display), and
+              --sh-color-brass-text carries small text.
+     border — same split. WCAG 1.4.11 wants 3:1 only for boundaries that
+              IDENTIFY a component. Decorative Strand rules keep the soft tan;
+              functional boundaries use --sh-color-border-ui.
+
+   NEVER put small text on --sh-color-brass, --sh-color-border, or
+   --sh-color-accent-muted. They are fills and rules only.
+   ========================================================================== */
+
+/* @import must be the first rule in the sheet or browsers drop it silently.
+   If ReadMe's panel strips it, put the <link> tags in the HTML tab instead. */
+@import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. LIGHT — "The Sitting Room"
+   Declared on `body`, not `:root`: ReadMe loads its own `:root` variables
+   AFTER yours, so `:root` overrides lose the cascade.
+   -------------------------------------------------------------------------- */
+body {
+  color-scheme: light;
+
+  --sh-color-bg-primary:     #F4ECD8;  /* aged paper / parchment */
+  --sh-color-bg-secondary:   #E8DCC4;  /* old case files */
+  --sh-color-bg-tertiary:    #D4C5A0;  /* manila folder */
+  --sh-color-bg-inset:       #EDE0C8;  /* the writing desk */
+
+  --sh-color-text-primary:   #2B1D0E;  /* walnut ink        9.57:1 worst case */
+  --sh-color-text-secondary: #5C4A30;  /* Watson's hand     4.96:1 */
+  --sh-color-text-muted:     #654E31;  /* marginalia        4.57:1  (was #8B7355, 2.63) */
+  --sh-color-text-inverse:   #F4ECD8;
+
+  --sh-color-accent:         #8B0000;  /* sealing wax       5.86:1 */
+  --sh-color-accent-hover:   #9E2324;  /*                   4.52:1  (was #A52A2A, 4.15) */
+  --sh-color-accent-muted:   #A04040;  /* DECORATIVE FILL ONLY */
+  --sh-color-on-accent:      #F4ECD8;  /*                   8.50:1 on accent */
+  --sh-color-on-accent-muted:#F4ECD8;  /*                   5.40:1 */
+
+  --sh-color-brass:          #B8860B;  /* DECORATIVE ONLY — gas-lamp brass */
+  --sh-color-brass-light:    #DAA520;  /* DECORATIVE ONLY */
+  --sh-color-brass-text:     #764800;  /* brass that carries text   4.56:1 */
+
+  --sh-color-tobacco:        #6B4226;  /* Persian slipper   5.05:1 */
+  --sh-color-fog:            #455466;  /* London fog        4.53:1  (was #6B7B8D, 3.65) */
+  --sh-color-ink-blue:       #1B2845;  /* official ink      8.56:1 */
+
+  --sh-color-border:         #C4B280;  /* DECORATIVE ONLY — Strand rules */
+  --sh-color-border-ui:      #988756;  /* component boundaries      3.01:1 */
+  --sh-color-border-strong:  #8B7355;  /* furniture edges           3.81:1 */
+  --sh-color-border-accent:  #8B0000;
+
+  --sh-color-success:        #3B5B2B;  /* case solved       4.52:1  (was #4A6B3A, 3.56) */
+  --sh-color-warning:        #764800;  /*                   4.56:1  (was #B8860B, 2.40) */
+  --sh-color-error:          #8B0000;  /*                   5.86:1 */
+  --sh-color-info:           #1B2845;  /*                   8.56:1 */
+
+  /* --- type --- */
+  --sh-font-display: "Besley", "Clarendon", Georgia, serif;
+  --sh-font-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sh-font-ui:      "IM Fell English", "PT Serif", Georgia, serif;
+  --sh-font-mono:    "Courier Prime", "Courier New", monospace;
+
+  /* Perfect Fourth (1.250), precomputed. CSS calc() has NO ** operator —
+     the original spec's calc(1rem * var(--font-scale) ** 3) is invalid CSS
+     and silently drops the whole declaration. */
+  --sh-fs-xs:   0.8rem;      /* 12.8px — floor. 0.64rem/10.24px is too small to read. */
+  --sh-fs-sm:   0.8rem;      /* 12.8px */
+  --sh-fs-base: 1rem;        /* 16px   */
+  --sh-fs-md:   1.25rem;     /* 20px   */
+  --sh-fs-lg:   1.5625rem;   /* 25px   */
+  --sh-fs-xl:   1.9531rem;   /* 31.3px */
+  --sh-fs-2xl:  2.4414rem;   /* 39.1px */
+  --sh-fs-3xl:  3.0518rem;   /* 48.8px */
+  --sh-fs-4xl:  3.8147rem;   /* 61.0px */
+
+  --sh-lh-tight: 1.15;  --sh-lh-snug: 1.35;  --sh-lh-normal: 1.6;  --sh-lh-relaxed: 1.8;
+  --sh-fw-regular: 400; --sh-fw-medium: 500; --sh-fw-semibold: 600;
+  --sh-fw-bold: 700;    --sh-fw-black: 900;
+
+  --sh-space-xs: 0.25rem; --sh-space-sm: 0.5rem; --sh-space-md: 1rem;
+  --sh-space-lg: 1.5rem;  --sh-space-xl: 2rem;   --sh-space-2xl: 3rem; --sh-space-3xl: 4rem;
+
+  --sh-radius-sm: 2px; --sh-radius-md: 4px; --sh-radius-lg: 8px; --sh-radius-pill: 999px;
+  --sh-border-thin: 1px; --sh-border-default: 2px; --sh-border-thick: 3px;
+
+  --sh-shadow-sm: 0 1px 2px rgba(43, 29, 14, 0.08);
+  --sh-shadow-md: 0 2px 8px rgba(43, 29, 14, 0.12);
+  --sh-shadow-lg: 0 8px 24px rgba(43, 29, 14, 0.16);
+  --sh-shadow-gas-lamp: 0 0 20px rgba(184, 134, 11, 0.15);
+
+  --sh-transition-fast: 150ms ease;
+  --sh-transition-normal: 250ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. DARK — "The Foggy Streets"
+   Two hooks, because they are two different claims. .ThemeContext_dark is the
+   class observed on <body> in the live DOM. [data-color-mode="dark"] is what
+   ReadMe documents under Color Schemes. Keying off only one is a bet, and on a
+   hub that renders the other, dark mode is not degraded — it is dead. The
+   spec's [data-theme="dark"] is not a ReadMe selector under either reading.
+
+   color-scheme is declared alongside the palette so the browser flips the
+   chrome it draws itself — scrollbars, carets, form controls — instead of
+   leaving light scrollbars over a dark page.
+   -------------------------------------------------------------------------- */
+body.ThemeContext_dark,
+[data-color-mode="dark"] body {
+  color-scheme: dark;
+
+  --sh-color-bg-primary:     #1A1510;  /* dark walnut wainscoting */
+  --sh-color-bg-secondary:   #221B13;  /* leather bindings */
+  --sh-color-bg-tertiary:    #2E2419;  /* writing desk */
+  --sh-color-bg-inset:       #15110C;  /* fireplace recess */
+
+  --sh-color-text-primary:   #E8DCC4;  /*                  11.19:1 */
+  --sh-color-text-secondary: #C4B280;  /*                   7.25:1 */
+  --sh-color-text-muted:     #A2896B;  /*                   4.58:1  (was #8B7355, 3.39) */
+  --sh-color-text-inverse:   #1A1510;
+
+  --sh-color-accent:         #DE6766;  /*                   4.51:1  (was #C45050, 3.33) */
+  --sh-color-accent-hover:   #EC8483;  /*                   5.93:1 */
+  --sh-color-accent-muted:   #8B3030;  /* DECORATIVE FILL ONLY */
+  --sh-color-on-accent:      #1A1510;  /*                   5.38:1 on accent */
+  --sh-color-on-accent-muted:#F4ECD8;  /*                   6.96:1 */
+
+  --sh-color-brass:          #DAA520;  /* brass glows in the dark   6.79:1 */
+  --sh-color-brass-light:    #F0C040;
+  --sh-color-brass-text:     #DAA520;  /* brass reads fine on dark — no split needed */
+
+  --sh-color-tobacco:        #A78665;  /*                   4.51:1  (was #8B6B4A, 3.48) */
+  --sh-color-fog:            #8B9BAA;  /*                   5.33:1 */
+  --sh-color-ink-blue:       #6E8EBA;  /*                   4.51:1  (was #5B7BA5, 3.91) */
+
+  --sh-color-border:         #4A3825;  /* DECORATIVE ONLY */
+  --sh-color-border-ui:      #74614D;  /*                   3.07:1 */
+  --sh-color-border-strong:  #785F41;  /*                   3.03:1  (was #6B5235, 2.49) */
+  --sh-color-border-accent:  #DE6766;
+
+  --sh-color-success:        #7A9B6A;  /*                   4.86:1 */
+  --sh-color-warning:        #DAA520;  /*                   6.79:1 */
+  --sh-color-error:          #DE6765;  /*                   4.51:1 */
+  --sh-color-info:           #6E8EBA;  /*                   4.51:1 */
+
+  --sh-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --sh-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --sh-shadow-gas-lamp: 0 0 24px rgba(218, 165, 32, 0.22);
+}
+
+/* --------------------------------------------------------------------------
+   3. ReadMe variable bindings — DOCUMENTED NAMES ONLY.
+   Every name below is on ReadMe's published list. Each was diffed against it
+   rather than read for plausibility, because the invented names in the source
+   spec sat directly beside real ones and a half-wrong list looks entirely
+   plausible.
+
+   Cut as invented: --Header-textColor, --Sidebar-background,
+   --Sidebar-textColor, --tryit-borderColor, --sh-color-primary, and camelCase
+   --Header-borderColor where the real name is --Header-border-color. The spec
+   also wrote --Header-button-padding; the real name is --Header-tab-padding,
+   which is what this block now sets.
+
+   Note that --Sidebar-border-color and --tryit-background — also in the spec —
+   ARE documented. They are unbound here only because section 6 already covers
+   those surfaces with .rm- selectors, not because the names are suspect.
+
+   Unverified names fail SILENTLY: they look applied and do nothing.
+   -------------------------------------------------------------------------- */
+body {
+  --font-family: var(--sh-font-body);
+  --Header-background:    var(--sh-color-bg-secondary);
+  --Header-border-color:  var(--sh-color-border-strong);
+  --Header-tab-underline: var(--sh-color-accent);
+  --Header-tab-padding:   var(--sh-space-sm) var(--sh-space-md);
+}
+
+body.ThemeContext_dark,
+[data-color-mode="dark"] body {
+  --Header-background:    var(--sh-color-bg-inset);
+  --Header-border-color:  var(--sh-color-border-strong);
+  --Header-tab-underline: var(--sh-color-brass);
+}
+
+/* --------------------------------------------------------------------------
+   4. Decorative motifs — The Strand Magazine, 1891
+   -------------------------------------------------------------------------- */
+
+/* The double rule: the single most recognisable Strand element. */
+.strand-rule {
+  border: none;
+  border-top: 4px double var(--sh-color-border-strong);
+  margin: var(--sh-space-xl) 0;
+}
+
+.strand-flourish {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--sh-space-xl) 0;
+}
+.strand-flourish::before,
+.strand-flourish::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid var(--sh-color-border-strong);
+}
+.strand-flourish::before { margin-right: var(--sh-space-md); }
+.strand-flourish::after  { margin-left: var(--sh-space-md); }
+.strand-flourish span {
+  font-family: var(--sh-font-display);
+  font-size: var(--sh-fs-lg);
+  color: var(--sh-color-brass-text);
+}
+
+/* The case file card. */
+.case-file {
+  background: var(--sh-color-bg-secondary);
+  border: var(--sh-border-default) solid var(--sh-color-border-ui);
+  border-left: var(--sh-border-thick) solid var(--sh-color-accent);
+  border-radius: var(--sh-radius-sm);
+  padding: var(--sh-space-lg);
+  box-shadow: var(--sh-shadow-md);
+  position: relative;
+}
+
+/* The CONFIDENTIAL stamp. Decorative only — aria-hidden by construction
+   since it is generated content, so screen readers skip it. */
+.case-file--classified::before {
+  content: "CONFIDENTIAL";
+  position: absolute;
+  top: var(--sh-space-sm);
+  right: var(--sh-space-md);
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-black);
+  font-size: var(--sh-fs-xs);
+  letter-spacing: 0.15em;
+  color: var(--sh-color-accent);
+  border: 2px solid var(--sh-color-accent);
+  padding: 2px 8px;
+  border-radius: var(--sh-radius-sm);
+  transform: rotate(-8deg);
+  opacity: 0.75;
+  text-transform: uppercase;
+}
+
+/* The telegram. */
+.telegram {
+  background: var(--sh-color-bg-tertiary);
+  border: var(--sh-border-default) dashed var(--sh-color-border-strong);
+  padding: var(--sh-space-md) var(--sh-space-lg);
+  font-family: var(--sh-font-mono);
+  font-size: var(--sh-fs-sm);
+  color: var(--sh-color-text-primary);
+  border-radius: var(--sh-radius-sm);
+}
+.telegram::before {
+  content: "STOP";
+  display: block;
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-bold);
+  font-size: var(--sh-fs-xs);
+  letter-spacing: 0.2em;
+  color: var(--sh-color-brass-text);
+  margin-bottom: var(--sh-space-xs);
+}
+
+/* The wax seal. */
+.wax-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+              var(--sh-color-accent-hover), var(--sh-color-accent));
+  color: var(--sh-color-on-accent);
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-black);
+  font-size: var(--sh-fs-sm);
+  box-shadow: var(--sh-shadow-md), inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--sh-color-accent-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. Aged-paper texture + gas-lamp glow
+   The grain is BROWN INK on pale paper. Reused unchanged on a dark ground it
+   is invisible at best and muddy at worst, so dark gets its own pass: pale
+   grain instead of dark, and a stronger lamp, because a gas-lamp in the fog is
+   the whole point of the dark palette.
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--sh-color-bg-primary);
+  background-image:
+    radial-gradient(ellipse at top, rgba(218, 165, 32, 0.08) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.11 0 0 0 0 0.05 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+}
+
+body.ThemeContext_dark,
+[data-color-mode="dark"] body {
+  background-image:
+    radial-gradient(ellipse at top, rgba(218, 165, 32, 0.14) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.91 0 0 0 0 0.86 0 0 0 0 0.77 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --------------------------------------------------------------------------
+   6. ReadMe `.rm-` selectors — documented stable classes only.
+   ReadMe's own panel says: "Use reserved classes, like .rm-Sidebar", and warns
+   that hashed selectors change constantly. There are none of those here.
+   -------------------------------------------------------------------------- */
+.rm-Header {
+  /* The spec had `border-bottom: var(--border-ornate) solid ...` where
+     --border-ornate was `4px double`. That expands to "4px double solid" —
+     two style keywords, invalid, whole declaration dropped. */
+  border-bottom: 4px double var(--sh-color-border-strong) !important;
+  font-family: var(--sh-font-display) !important;
+  box-shadow: var(--sh-shadow-gas-lamp);
+}
+
+.rm-Sidebar {
+  background: var(--sh-color-bg-secondary) !important;
+  border-right: var(--sh-border-default) solid var(--sh-color-border-ui) !important;
+  font-family: var(--sh-font-ui);
+  font-size: var(--sh-fs-sm);
+  line-height: var(--sh-lh-normal);
+}
+
+.rm-Sidebar-section {
+  font-family: var(--sh-font-ui);
+  letter-spacing: 0.02em;
+  color: var(--sh-color-text-secondary);
+}
+
+.rm-Guides, .rm-Guide,
+.rm-ReferenceMain, .rm-Reference {
+  background: transparent;
+  color: var(--sh-color-text-primary);
+  font-family: var(--sh-font-body);
+  font-size: var(--sh-fs-base);
+  line-height: var(--sh-lh-relaxed);   /* generous, like a printed novel */
+}
+
+.rm-Guides h1, .rm-Guide h1, .rm-ReferenceMain h1, .rm-Reference h1,
+.rm-Guides h2, .rm-Guide h2, .rm-ReferenceMain h2, .rm-Reference h2,
+.rm-Guides h3, .rm-Guide h3, .rm-ReferenceMain h3, .rm-Reference h3 {
+  font-family: var(--sh-font-display) !important;
+  color: var(--sh-color-text-primary) !important;
+  letter-spacing: -0.01em;
+}
+.rm-Guides h1, .rm-Guide h1 { font-size: var(--sh-fs-3xl); font-weight: var(--sh-fw-black); line-height: var(--sh-lh-tight); }
+.rm-Guides h2, .rm-Guide h2 {
+  font-size: var(--sh-fs-2xl);
+  line-height: var(--sh-lh-snug);
+  border-bottom: 4px double var(--sh-color-border-strong);
+  padding-bottom: var(--sh-space-sm);
+}
+.rm-Guides h3, .rm-Guide h3 { font-size: var(--sh-fs-xl); line-height: var(--sh-lh-snug); }
+
+.rm-Guides a, .rm-Guide a,
+.rm-ReferenceMain a, .rm-Reference a {
+  color: var(--sh-color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--sh-color-brass);
+  text-underline-offset: 0.15em;
+}
+.rm-Guides a:hover, .rm-Guide a:hover,
+.rm-ReferenceMain a:hover, .rm-Reference a:hover {
+  color: var(--sh-color-accent-hover);
+}
+
+.rm-Guides blockquote, .rm-Guide blockquote {
+  border-left: var(--sh-border-thick) solid var(--sh-color-accent);
+  padding-left: var(--sh-space-lg);
+  font-style: italic;
+  color: var(--sh-color-text-secondary);
+  margin: var(--sh-space-xl) 0;
+}
+
+.rm-CodeBlock, pre, code, kbd, samp {
+  font-family: var(--sh-font-mono) !important;
+}
+.rm-Guides code, .rm-Guide code {
+  background: var(--sh-color-bg-inset);
+  border: var(--sh-border-thin) solid var(--sh-color-border-ui);
+  padding: 2px 6px;
+  border-radius: var(--sh-radius-sm);
+  color: var(--sh-color-text-primary);
+}
+
+.rm-TryIt {
+  border: var(--sh-border-default) dashed var(--sh-color-border-strong) !important;
+  background: var(--sh-color-bg-inset) !important;
+  border-radius: var(--sh-radius-sm);
+}
+
+.rm-SearchToggle {
+  font-family: var(--sh-font-ui);
+  border: var(--sh-border-thin) solid var(--sh-color-border-ui) !important;
+  border-radius: var(--sh-radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   7. Accessibility floor. Do not remove.
+   -------------------------------------------------------------------------- */
+.rm-Header :focus-visible,
+.rm-Sidebar :focus-visible,
+.rm-Guides :focus-visible, .rm-Guide :focus-visible,
+.rm-ReferenceMain :focus-visible, .rm-Reference :focus-visible {
+  outline: 3px solid var(--sh-color-brass-light);
+  outline-offset: 2px;
+  border-radius: var(--sh-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The paper texture is atmosphere, not information — drop it for anyone who
+   has asked for reduced transparency or high contrast. */
+@media (prefers-contrast: more) {
+  body { background-image: none; }
+}
+
+/* ==========================================================================
+   8. DEPTH — the surfaces a ReadMe reviewer actually opens
+   --------------------------------------------------------------------------
+   Everything below styles SEMANTIC HTML scoped inside ReadMe's documented
+   containers, rather than guessing at `.rm-` class names.
+
+   That is a deliberate engineering choice, not a shortcut. ReadMe's own panel
+   warns that hashed selectors "change constantly." Class names like
+   `.rm-Callout-title` are undocumented and may not exist. But `h2`, `table`,
+   `blockquote`, `pre`, `dl` inside `.rm-Guides` are guaranteed by HTML itself.
+   Styling the document tree instead of the framework's private class names is
+   what makes a theme survive a platform upgrade.
+   ========================================================================== */
+
+/* --- The Strand drop cap: first letter of the opening paragraph ---------- */
+.rm-Guides > p:first-of-type::first-letter,
+.rm-Guide  > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-black);
+  font-size: 3.6em;
+  line-height: 0.82;
+  padding: 0.06em 0.10em 0 0;
+  color: var(--sh-color-accent);
+}
+
+/* --- Tables as ledger pages --------------------------------------------- */
+.rm-Guides table, .rm-Guide table,
+.rm-ReferenceMain table, .rm-Reference table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--sh-space-xl) 0;
+  font-size: var(--sh-fs-sm);
+  border-top: 4px double var(--sh-color-border-strong);
+  border-bottom: 4px double var(--sh-color-border-strong);
+}
+.rm-Guides th, .rm-Guide th,
+.rm-ReferenceMain th, .rm-Reference th {
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-bold);
+  text-align: left;
+  padding: var(--sh-space-sm) var(--sh-space-md);
+  color: var(--sh-color-text-primary);
+  border-bottom: var(--sh-border-default) solid var(--sh-color-border-ui);
+}
+.rm-Guides td, .rm-Guide td,
+.rm-ReferenceMain td, .rm-Reference td {
+  padding: var(--sh-space-sm) var(--sh-space-md);
+  border-bottom: var(--sh-border-thin) solid var(--sh-color-border-ui);
+  color: var(--sh-color-text-secondary);
+}
+/* Alternating rows, like ruled ledger paper. */
+.rm-Guides tbody tr:nth-child(even),
+.rm-Guide  tbody tr:nth-child(even) { background: var(--sh-color-bg-inset); }
+
+/* --- Definition lists as case notes -------------------------------------- */
+.rm-Guides dt, .rm-Guide dt {
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-bold);
+  color: var(--sh-color-text-primary);
+  margin-top: var(--sh-space-md);
+}
+.rm-Guides dd, .rm-Guide dd {
+  margin-left: var(--sh-space-lg);
+  padding-left: var(--sh-space-md);
+  border-left: var(--sh-border-default) solid var(--sh-color-border-ui);
+  color: var(--sh-color-text-secondary);
+}
+
+/* --- HTTP method stamps --------------------------------------------------
+   Outlined, not filled. An outlined badge reuses colour pairs already
+   verified as text-on-surface, so no new contrast pair is introduced.
+   Filled badges would each need their own on-fill audit.
+   Usage in markdown: <span class="method method--get">GET</span>          */
+.method {
+  display: inline-block;
+  font-family: var(--sh-font-display);
+  font-weight: var(--sh-fw-black);
+  font-size: var(--sh-fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: var(--sh-radius-sm);
+  border: var(--sh-border-default) solid currentColor;
+  background: var(--sh-color-bg-inset);
+}
+.method--get    { color: var(--sh-color-info); }
+.method--post   { color: var(--sh-color-success); }
+.method--put,
+.method--patch  { color: var(--sh-color-brass-text); }
+.method--delete { color: var(--sh-color-error); }
+
+/* --- Marginalia: a note in the margin, as Watson would ------------------- */
+.marginalia {
+  font-family: var(--sh-font-ui);
+  font-style: italic;
+  font-size: var(--sh-fs-sm);
+  color: var(--sh-color-text-secondary);
+  border-left: var(--sh-border-default) solid var(--sh-color-brass);
+  padding-left: var(--sh-space-md);
+  margin: var(--sh-space-lg) 0;
+}
+
+/* --- Code: the typewriter ------------------------------------------------ */
+.rm-Guides pre, .rm-Guide pre,
+.rm-ReferenceMain pre, .rm-Reference pre {
+  background: var(--sh-color-bg-inset);
+  border: var(--sh-border-thin) solid var(--sh-color-border-ui);
+  border-left: var(--sh-border-thick) solid var(--sh-color-brass);
+  border-radius: var(--sh-radius-sm);
+  padding: var(--sh-space-md);
+  overflow-x: auto;
+  line-height: var(--sh-lh-normal);
+}
+
+/* --- Selection: a smear of sealing wax ----------------------------------- */
+::selection { background: var(--sh-color-accent-muted); color: var(--sh-color-on-accent-muted); }
+
+/* --- The gas lamp breathes ----------------------------------------------
+   Deliberately: opacity only (compositor-only, no layout thrash), 8s, subtle,
+   and entirely disabled under prefers-reduced-motion by the rule in §7.     */
+@keyframes gaslamp {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.82; }
+}
+.rm-Header { animation: gaslamp 8s ease-in-out infinite; }
+
+/* ==========================================================================
+   9. PRINT — because API docs get printed and handed round in meetings.
+   The texture, the glow and the flicker are atmosphere; on paper they are
+   toner. Link targets are surfaced, since a printed hyperlink is otherwise
+   a dead end.
+   ========================================================================== */
+@media print {
+  body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+  .rm-Sidebar, .rm-SearchToggle, .rm-TryIt, .preview-toggle { display: none !important; }
+  .rm-Header { animation: none !important; box-shadow: none !important; }
+
+  .rm-Guides a::after, .rm-Guide a::after {
+    content: " (" attr(href) ")";
+    font-family: var(--sh-font-mono);
+    font-size: 0.85em;
+    color: #444;
+  }
+  .case-file, .telegram, pre, table { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+}
+
+/* ==========================================================================
+   10. HEADER FIX — belt and braces
+   --------------------------------------------------------------------------
+   Observed on the live hub: the header stayed white with ReadMe's default blue
+   despite --Header-background being set in §3. Either the variable is not
+   consumed on this surface, or ReadMe's own rule outranks it.
+
+   §3 still sets the documented variables (they cost nothing and are the
+   correct mechanism if they do bind). This section styles the documented
+   .rm-Header class directly as a fallback, per runbook §10: prefer the
+   variable, fall back to the class, never reach for a hashed selector.
+
+   The active-tab underline is deliberately NOT targeted here. Reaching it
+   would require a hashed, undocumented selector -- exactly the dependency
+   runbook §4 exists to warn against. If --Header-tab-underline does not bind,
+   the tab stays ReadMe blue, and that is the correct trade.
+   ========================================================================== */
+.rm-Header {
+  background: var(--sh-color-bg-secondary) !important;
+  border-bottom: 4px double var(--sh-color-border-strong) !important;
+}
+body.ThemeContext_dark .rm-Header,
+.ThemeContext_dark .rm-Header,
+[data-color-mode="dark"] body .rm-Header {
+  background: var(--sh-color-bg-inset) !important;
+}

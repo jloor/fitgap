@@ -1,0 +1,564 @@
+/* ==========================================================================
+   🕵️  THE SHERLOCK HOLMES THEME — 221B Baker Street, 1895
+   Fitgap docs hub · paste into Appearance → Custom CSS & JavaScript → CSS
+   --------------------------------------------------------------------------
+   Colours verified by design/sherlock-audit.py — that script exits non-zero
+   if any pair regresses, so re-run it after any colour edit:
+
+       python3 design/sherlock-audit.py
+
+   TWO TOKENS ARE DELIBERATELY SPLIT, and this matters:
+
+     brass  — the original #B8860B is 2.76:1 on parchment. Darkening it to pass
+              turns brass into olive and kills the gas-lamp quality. So brass
+              stays brass for DECORATION (rules, glows, large display), and
+              --color-brass-text carries small text.
+     border — same split. WCAG 1.4.11 wants 3:1 only for boundaries that
+              IDENTIFY a component. Decorative Strand rules keep the soft tan;
+              functional boundaries use --color-border-ui.
+
+   NEVER put small text on --color-brass, --color-border, or
+   --color-accent-muted. They are fills and rules only.
+   ========================================================================== */
+
+/* @import must be the first rule in the sheet or browsers drop it silently.
+   If ReadMe's panel strips it, put the <link> tags in the HTML tab instead. */
+@import url('https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. LIGHT — "The Sitting Room"
+   Declared on `body`, not `:root`: ReadMe loads its own `:root` variables
+   AFTER yours, so `:root` overrides lose the cascade.
+   -------------------------------------------------------------------------- */
+body {
+  --color-bg-primary:     #F4ECD8;  /* aged paper / parchment */
+  --color-bg-secondary:   #E8DCC4;  /* old case files */
+  --color-bg-tertiary:    #D4C5A0;  /* manila folder */
+  --color-bg-inset:       #EDE0C8;  /* the writing desk */
+
+  --color-text-primary:   #2B1D0E;  /* walnut ink        9.57:1 worst case */
+  --color-text-secondary: #5C4A30;  /* Watson's hand     4.96:1 */
+  --color-text-muted:     #654E31;  /* marginalia        4.57:1  (was #8B7355, 2.63) */
+  --color-text-inverse:   #F4ECD8;
+
+  --color-accent:         #8B0000;  /* sealing wax       5.86:1 */
+  --color-accent-hover:   #9E2324;  /*                   4.52:1  (was #A52A2A, 4.15) */
+  --color-accent-muted:   #A04040;  /* DECORATIVE FILL ONLY */
+  --color-on-accent:      #F4ECD8;  /*                   8.50:1 on accent */
+  --color-on-accent-muted:#F4ECD8;  /*                   5.40:1 */
+
+  --color-brass:          #B8860B;  /* DECORATIVE ONLY — gas-lamp brass */
+  --color-brass-light:    #DAA520;  /* DECORATIVE ONLY */
+  --color-brass-text:     #764800;  /* brass that carries text   4.56:1 */
+
+  --color-tobacco:        #6B4226;  /* Persian slipper   5.05:1 */
+  --color-fog:            #455466;  /* London fog        4.53:1  (was #6B7B8D, 3.65) */
+  --color-ink-blue:       #1B2845;  /* official ink      8.56:1 */
+
+  --color-border:         #C4B280;  /* DECORATIVE ONLY — Strand rules */
+  --color-border-ui:      #988756;  /* component boundaries      3.01:1 */
+  --color-border-strong:  #8B7355;  /* furniture edges           3.81:1 */
+  --color-border-accent:  #8B0000;
+
+  --color-success:        #3B5B2B;  /* case solved       4.52:1  (was #4A6B3A, 3.56) */
+  --color-warning:        #764800;  /*                   4.56:1  (was #B8860B, 2.40) */
+  --color-error:          #8B0000;  /*                   5.86:1 */
+  --color-info:           #1B2845;  /*                   8.56:1 */
+
+  /* --- type --- */
+  --font-display: "Besley", "Clarendon", Georgia, serif;
+  --font-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-ui:      "IM Fell English", "PT Serif", Georgia, serif;
+  --font-mono:    "Courier Prime", "Courier New", monospace;
+
+  /* Perfect Fourth (1.250), precomputed. CSS calc() has NO ** operator —
+     the original spec's calc(1rem * var(--font-scale) ** 3) is invalid CSS
+     and silently drops the whole declaration. */
+  --fs-xs:   0.8rem;      /* 12.8px — floor. 0.64rem/10.24px is too small to read. */
+  --fs-sm:   0.8rem;      /* 12.8px */
+  --fs-base: 1rem;        /* 16px   */
+  --fs-md:   1.25rem;     /* 20px   */
+  --fs-lg:   1.5625rem;   /* 25px   */
+  --fs-xl:   1.9531rem;   /* 31.3px */
+  --fs-2xl:  2.4414rem;   /* 39.1px */
+  --fs-3xl:  3.0518rem;   /* 48.8px */
+  --fs-4xl:  3.8147rem;   /* 61.0px */
+
+  --lh-tight: 1.15;  --lh-snug: 1.35;  --lh-normal: 1.6;  --lh-relaxed: 1.8;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600;
+  --fw-bold: 700;    --fw-black: 900;
+
+  --space-xs: 0.25rem; --space-sm: 0.5rem; --space-md: 1rem;
+  --space-lg: 1.5rem;  --space-xl: 2rem;   --space-2xl: 3rem; --space-3xl: 4rem;
+
+  --radius-sm: 2px; --radius-md: 4px; --radius-lg: 8px; --radius-pill: 999px;
+  --border-thin: 1px; --border-default: 2px; --border-thick: 3px;
+
+  --shadow-sm: 0 1px 2px rgba(43, 29, 14, 0.08);
+  --shadow-md: 0 2px 8px rgba(43, 29, 14, 0.12);
+  --shadow-lg: 0 8px 24px rgba(43, 29, 14, 0.16);
+  --shadow-gas-lamp: 0 0 20px rgba(184, 134, 11, 0.15);
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   2. DARK — "The Foggy Streets"
+   ReadMe's own theme class is .ThemeContext_dark. The spec's
+   [data-color-mode="dark"] / [data-theme="dark"] selectors never match on
+   ReadMe and would leave the dark theme completely dead.
+   -------------------------------------------------------------------------- */
+body.ThemeContext_dark,
+.ThemeContext_dark {
+  --color-bg-primary:     #1A1510;  /* dark walnut wainscoting */
+  --color-bg-secondary:   #221B13;  /* leather bindings */
+  --color-bg-tertiary:    #2E2419;  /* writing desk */
+  --color-bg-inset:       #15110C;  /* fireplace recess */
+
+  --color-text-primary:   #E8DCC4;  /*                  11.19:1 */
+  --color-text-secondary: #C4B280;  /*                   7.25:1 */
+  --color-text-muted:     #A2896B;  /*                   4.58:1  (was #8B7355, 3.39) */
+  --color-text-inverse:   #1A1510;
+
+  --color-accent:         #DE6766;  /*                   4.51:1  (was #C45050, 3.33) */
+  --color-accent-hover:   #EC8483;  /*                   5.93:1 */
+  --color-accent-muted:   #8B3030;  /* DECORATIVE FILL ONLY */
+  --color-on-accent:      #1A1510;  /*                   5.38:1 on accent */
+  --color-on-accent-muted:#F4ECD8;  /*                   6.96:1 */
+
+  --color-brass:          #DAA520;  /* brass glows in the dark   6.79:1 */
+  --color-brass-light:    #F0C040;
+  --color-brass-text:     #DAA520;  /* brass reads fine on dark — no split needed */
+
+  --color-tobacco:        #A78665;  /*                   4.51:1  (was #8B6B4A, 3.48) */
+  --color-fog:            #8B9BAA;  /*                   5.33:1 */
+  --color-ink-blue:       #6E8EBA;  /*                   4.51:1  (was #5B7BA5, 3.91) */
+
+  --color-border:         #4A3825;  /* DECORATIVE ONLY */
+  --color-border-ui:      #74614D;  /*                   3.07:1 */
+  --color-border-strong:  #785F41;  /*                   3.03:1  (was #6B5235, 2.49) */
+  --color-border-accent:  #DE6766;
+
+  --color-success:        #7A9B6A;  /*                   4.86:1 */
+  --color-warning:        #DAA520;  /*                   6.79:1 */
+  --color-error:          #DE6765;  /*                   4.51:1 */
+  --color-info:           #6E8EBA;  /*                   4.51:1 */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-gas-lamp: 0 0 24px rgba(218, 165, 32, 0.22);
+}
+
+/* --------------------------------------------------------------------------
+   3. ReadMe variable bindings — VERIFIED NAMES ONLY.
+   These five are documented by ReadMe. The original spec also set
+   --Header-textColor, --Sidebar-background, --Sidebar-textColor,
+   --Sidebar-border-color, --tryit-background, --tryit-borderColor and
+   --color-primary. I could not verify any of those, and it wrote
+   --Header-borderColor (camelCase) where the real name is
+   --Header-border-color. Unverified variable names fail SILENTLY — they look
+   applied and do nothing. Section 6 covers those surfaces with .rm- selectors
+   instead, which are documented as stable.
+   -------------------------------------------------------------------------- */
+body {
+  --font-family: var(--font-body);
+  --Header-background:    var(--color-bg-secondary);
+  --Header-border-color:  var(--color-border-strong);
+  --Header-tab-underline: var(--color-accent);
+  --Header-button-padding: var(--space-sm) var(--space-md);
+}
+
+body.ThemeContext_dark {
+  --Header-background:    var(--color-bg-inset);
+  --Header-border-color:  var(--color-border-strong);
+  --Header-tab-underline: var(--color-brass);
+}
+
+/* --------------------------------------------------------------------------
+   4. Decorative motifs — The Strand Magazine, 1891
+   -------------------------------------------------------------------------- */
+
+/* The double rule: the single most recognisable Strand element. */
+.strand-rule {
+  border: none;
+  border-top: 4px double var(--color-border-strong);
+  margin: var(--space-xl) 0;
+}
+
+.strand-flourish {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--space-xl) 0;
+}
+.strand-flourish::before,
+.strand-flourish::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px solid var(--color-border-strong);
+}
+.strand-flourish::before { margin-right: var(--space-md); }
+.strand-flourish::after  { margin-left: var(--space-md); }
+.strand-flourish span {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--color-brass-text);
+}
+
+/* The case file card. */
+.case-file {
+  background: var(--color-bg-secondary);
+  border: var(--border-default) solid var(--color-border-ui);
+  border-left: var(--border-thick) solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+/* The CONFIDENTIAL stamp. Decorative only — aria-hidden by construction
+   since it is generated content, so screen readers skip it. */
+.case-file--classified::before {
+  content: "CONFIDENTIAL";
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  transform: rotate(-8deg);
+  opacity: 0.75;
+  text-transform: uppercase;
+}
+
+/* The telegram. */
+.telegram {
+  background: var(--color-bg-tertiary);
+  border: var(--border-default) dashed var(--color-border-strong);
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-sm);
+}
+.telegram::before {
+  content: "STOP";
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.2em;
+  color: var(--color-brass-text);
+  margin-bottom: var(--space-xs);
+}
+
+/* The wax seal. */
+.wax-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+              var(--color-accent-hover), var(--color-accent));
+  color: var(--color-on-accent);
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-sm);
+  box-shadow: var(--shadow-md), inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-accent-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. Aged-paper texture + gas-lamp glow
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--color-bg-primary);
+  background-image:
+    radial-gradient(ellipse at top, rgba(218, 165, 32, 0.08) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.17 0 0 0 0 0.11 0 0 0 0 0.05 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+}
+
+/* --------------------------------------------------------------------------
+   6. ReadMe `.rm-` selectors — documented stable classes only.
+   ReadMe's own panel says: "Use reserved classes, like .rm-Sidebar", and warns
+   that hashed selectors change constantly. There are none of those here.
+   -------------------------------------------------------------------------- */
+.rm-Header {
+  /* The spec had `border-bottom: var(--border-ornate) solid ...` where
+     --border-ornate was `4px double`. That expands to "4px double solid" —
+     two style keywords, invalid, whole declaration dropped. */
+  border-bottom: 4px double var(--color-border-strong) !important;
+  font-family: var(--font-display) !important;
+  box-shadow: var(--shadow-gas-lamp);
+}
+
+.rm-Sidebar {
+  background: var(--color-bg-secondary) !important;
+  border-right: var(--border-default) solid var(--color-border-ui) !important;
+  font-family: var(--font-ui);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+.rm-Sidebar-section {
+  font-family: var(--font-ui);
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+.rm-Guides, .rm-Guide,
+.rm-ReferenceMain, .rm-Reference {
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-relaxed);   /* generous, like a printed novel */
+}
+
+.rm-Guides h1, .rm-Guide h1, .rm-ReferenceMain h1, .rm-Reference h1,
+.rm-Guides h2, .rm-Guide h2, .rm-ReferenceMain h2, .rm-Reference h2,
+.rm-Guides h3, .rm-Guide h3, .rm-ReferenceMain h3, .rm-Reference h3 {
+  font-family: var(--font-display) !important;
+  color: var(--color-text-primary) !important;
+  letter-spacing: -0.01em;
+}
+.rm-Guides h1, .rm-Guide h1 { font-size: var(--fs-3xl); font-weight: var(--fw-black); line-height: var(--lh-tight); }
+.rm-Guides h2, .rm-Guide h2 {
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-snug);
+  border-bottom: 4px double var(--color-border-strong);
+  padding-bottom: var(--space-sm);
+}
+.rm-Guides h3, .rm-Guide h3 { font-size: var(--fs-xl); line-height: var(--lh-snug); }
+
+.rm-Guides a, .rm-Guide a,
+.rm-ReferenceMain a, .rm-Reference a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--color-brass);
+  text-underline-offset: 0.15em;
+}
+.rm-Guides a:hover, .rm-Guide a:hover,
+.rm-ReferenceMain a:hover, .rm-Reference a:hover {
+  color: var(--color-accent-hover);
+}
+
+.rm-Guides blockquote, .rm-Guide blockquote {
+  border-left: var(--border-thick) solid var(--color-accent);
+  padding-left: var(--space-lg);
+  font-style: italic;
+  color: var(--color-text-secondary);
+  margin: var(--space-xl) 0;
+}
+
+.rm-CodeBlock, pre, code, kbd, samp {
+  font-family: var(--font-mono) !important;
+}
+.rm-Guides code, .rm-Guide code {
+  background: var(--color-bg-inset);
+  border: var(--border-thin) solid var(--color-border-ui);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+}
+
+.rm-TryIt {
+  border: var(--border-default) dashed var(--color-border-strong) !important;
+  background: var(--color-bg-inset) !important;
+  border-radius: var(--radius-sm);
+}
+
+.rm-SearchToggle {
+  font-family: var(--font-ui);
+  border: var(--border-thin) solid var(--color-border-ui) !important;
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------------------------------------------------
+   7. Accessibility floor. Do not remove.
+   -------------------------------------------------------------------------- */
+.rm-Header :focus-visible,
+.rm-Sidebar :focus-visible,
+.rm-Guides :focus-visible, .rm-Guide :focus-visible,
+.rm-ReferenceMain :focus-visible, .rm-Reference :focus-visible {
+  outline: 3px solid var(--color-brass-light);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The paper texture is atmosphere, not information — drop it for anyone who
+   has asked for reduced transparency or high contrast. */
+@media (prefers-contrast: more) {
+  body { background-image: none; }
+}
+
+/* ==========================================================================
+   8. DEPTH — the surfaces a ReadMe reviewer actually opens
+   --------------------------------------------------------------------------
+   Everything below styles SEMANTIC HTML scoped inside ReadMe's documented
+   containers, rather than guessing at `.rm-` class names.
+
+   That is a deliberate engineering choice, not a shortcut. ReadMe's own panel
+   warns that hashed selectors "change constantly." Class names like
+   `.rm-Callout-title` are undocumented and may not exist. But `h2`, `table`,
+   `blockquote`, `pre`, `dl` inside `.rm-Guides` are guaranteed by HTML itself.
+   Styling the document tree instead of the framework's private class names is
+   what makes a theme survive a platform upgrade.
+   ========================================================================== */
+
+/* --- The Strand drop cap: first letter of the opening paragraph ---------- */
+.rm-Guides > p:first-of-type::first-letter,
+.rm-Guide  > p:first-of-type::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: 3.6em;
+  line-height: 0.82;
+  padding: 0.06em 0.10em 0 0;
+  color: var(--color-accent);
+}
+
+/* --- Tables as ledger pages --------------------------------------------- */
+.rm-Guides table, .rm-Guide table,
+.rm-ReferenceMain table, .rm-Reference table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-xl) 0;
+  font-size: var(--fs-sm);
+  border-top: 4px double var(--color-border-strong);
+  border-bottom: 4px double var(--color-border-strong);
+}
+.rm-Guides th, .rm-Guide th,
+.rm-ReferenceMain th, .rm-Reference th {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  text-align: left;
+  padding: var(--space-sm) var(--space-md);
+  color: var(--color-text-primary);
+  border-bottom: var(--border-default) solid var(--color-border-ui);
+}
+.rm-Guides td, .rm-Guide td,
+.rm-ReferenceMain td, .rm-Reference td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: var(--border-thin) solid var(--color-border-ui);
+  color: var(--color-text-secondary);
+}
+/* Alternating rows, like ruled ledger paper. */
+.rm-Guides tbody tr:nth-child(even),
+.rm-Guide  tbody tr:nth-child(even) { background: var(--color-bg-inset); }
+
+/* --- Definition lists as case notes -------------------------------------- */
+.rm-Guides dt, .rm-Guide dt {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  margin-top: var(--space-md);
+}
+.rm-Guides dd, .rm-Guide dd {
+  margin-left: var(--space-lg);
+  padding-left: var(--space-md);
+  border-left: var(--border-default) solid var(--color-border-ui);
+  color: var(--color-text-secondary);
+}
+
+/* --- HTTP method stamps --------------------------------------------------
+   Outlined, not filled. An outlined badge reuses colour pairs already
+   verified as text-on-surface, so no new contrast pair is introduced.
+   Filled badges would each need their own on-fill audit.
+   Usage in markdown: <span class="method method--get">GET</span>          */
+.method {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border-default) solid currentColor;
+  background: var(--color-bg-inset);
+}
+.method--get    { color: var(--color-info); }
+.method--post   { color: var(--color-success); }
+.method--put,
+.method--patch  { color: var(--color-brass-text); }
+.method--delete { color: var(--color-error); }
+
+/* --- Marginalia: a note in the margin, as Watson would ------------------- */
+.marginalia {
+  font-family: var(--font-ui);
+  font-style: italic;
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+  border-left: var(--border-default) solid var(--color-brass);
+  padding-left: var(--space-md);
+  margin: var(--space-lg) 0;
+}
+
+/* --- Code: the typewriter ------------------------------------------------ */
+.rm-Guides pre, .rm-Guide pre,
+.rm-ReferenceMain pre, .rm-Reference pre {
+  background: var(--color-bg-inset);
+  border: var(--border-thin) solid var(--color-border-ui);
+  border-left: var(--border-thick) solid var(--color-brass);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  overflow-x: auto;
+  line-height: var(--lh-normal);
+}
+
+/* --- Selection: a smear of sealing wax ----------------------------------- */
+::selection { background: var(--color-accent-muted); color: var(--color-on-accent-muted); }
+
+/* --- The gas lamp breathes ----------------------------------------------
+   Deliberately: opacity only (compositor-only, no layout thrash), 8s, subtle,
+   and entirely disabled under prefers-reduced-motion by the rule in §7.     */
+@keyframes gaslamp {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.82; }
+}
+.rm-Header { animation: gaslamp 8s ease-in-out infinite; }
+
+/* ==========================================================================
+   9. PRINT — because API docs get printed and handed round in meetings.
+   The texture, the glow and the flicker are atmosphere; on paper they are
+   toner. Link targets are surfaced, since a printed hyperlink is otherwise
+   a dead end.
+   ========================================================================== */
+@media print {
+  body {
+    background: #fff !important;
+    background-image: none !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+  .rm-Sidebar, .rm-SearchToggle, .rm-TryIt, .preview-toggle { display: none !important; }
+  .rm-Header { animation: none !important; box-shadow: none !important; }
+
+  .rm-Guides a::after, .rm-Guide a::after {
+    content: " (" attr(href) ")";
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: #444;
+  }
+  .case-file, .telegram, pre, table { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+}

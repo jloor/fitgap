@@ -1,0 +1,212 @@
+/* ==========================================================================
+   Fitgap -- ReadMe hub theme
+   Paste into: ReadMe dashboard -> Appearance -> Custom CSS & JavaScript
+   --------------------------------------------------------------------------
+   Requires a ReadMe Pro or Enterprise plan. Custom CSS is unavailable on
+   Starter; Custom JS is Enterprise-only. Confirm the plan before relying
+   on this file.
+
+   Values come from design/tokens.css, which is generated and contrast-verified
+   by design/tokens.py. If you change a color here by hand, re-run the
+   generator so the accessibility table still describes reality.
+
+   THREE RULES THIS FILE FOLLOWS, per ReadMe's own docs:
+
+   1. Overrides are declared on `body`, NOT `:root`. ReadMe's stylesheet loads
+      its `:root` variables AFTER yours, so `:root` overrides lose. `body` wins
+      on specificity.
+   2. Dark mode keys off `.ThemeContext_dark`, ReadMe's own theme class.
+   3. Only `.rm-` prefixed global classes are used as selectors. ReadMe states
+      that hashed selectors "change constantly and should not be relied on" --
+      so there are none in this file, and none should be added.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Token layer -- the full Fitgap palette, available to every rule below.
+   -------------------------------------------------------------------------- */
+body {
+  /* teal -- primary */
+  --fg-teal-50:  #e6fcfc;  --fg-teal-100: #d0f6f5;  --fg-teal-200: #aae8e8;
+  --fg-teal-300: #79d4d5;  --fg-teal-400: #3ebdbe;  --fg-teal-500: #00a4a5;
+  --fg-teal-600: #00898b;  --fg-teal-700: #006d6f;  --fg-teal-800: #005455;
+  --fg-teal-900: #003e3f;  --fg-teal-950: #002526;
+
+  /* indigo -- links */
+  --fg-indigo-200: #c6daff; --fg-indigo-300: #a7c1ff; --fg-indigo-700: #43599a;
+  --fg-indigo-800: #334477;
+
+  /* slate -- neutrals */
+  --fg-slate-50:  #f5f7f9;  --fg-slate-100: #e9eef0;  --fg-slate-200: #d5dce0;
+  --fg-slate-300: #bbc4c9;  --fg-slate-400: #9eaab0;  --fg-slate-500: #859197;
+  --fg-slate-600: #6d787e;  --fg-slate-700: #555f64;  --fg-slate-800: #41484c;
+  --fg-slate-900: #303639;  --fg-slate-950: #1c1f21;
+
+  /* semantic */
+  --fg-green-300: #9ad3a5;  --fg-green-700: #2e6c3f;
+  --fg-amber-300: #e6bb77;  --fg-amber-800: #614000;
+  --fg-red-300:   #fea8a1;  --fg-red-700:   #923f3b;
+
+  /* resolved semantic roles -- LIGHT (all pairs >= 4.5:1, verified) */
+  --fg-bg:            var(--fg-slate-50);
+  --fg-surface:       #ffffff;
+  --fg-text:          var(--fg-slate-900);   /* 12.26:1 on surface */
+  --fg-text-muted:    var(--fg-slate-700);   /*  6.55:1 on surface */
+  --fg-border:        var(--fg-slate-200);
+  --fg-primary:       var(--fg-teal-700);    /*  6.15:1 on surface */
+  --fg-primary-hover: var(--fg-teal-800);
+  --fg-on-primary:    #ffffff;               /*  6.15:1 on primary fill */
+  --fg-link:          var(--fg-indigo-700);  /*  6.70:1 on surface */
+  --fg-link-hover:    var(--fg-indigo-800);
+  --fg-success:       var(--fg-green-700);
+  --fg-warning:       var(--fg-amber-800);
+  --fg-danger:        var(--fg-red-700);
+  --fg-focus-ring:    var(--fg-teal-600);
+
+  /* type scale -- modular, ratio 1.2, 16px base */
+  --fg-text-sm:   0.8333rem;
+  --fg-text-base: 1rem;
+  --fg-text-lg:   1.2rem;
+  --fg-text-xl:   1.44rem;
+  --fg-text-2xl:  1.728rem;
+  --fg-text-3xl:  2.0736rem;
+  --fg-text-4xl:  2.4883rem;
+
+  --fg-leading-base: 1.65;
+  --fg-tracking-tight: -0.015em;
+
+  --fg-radius-sm: 4px;
+  --fg-radius-md: 6px;
+  --fg-radius-lg: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Dark theme -- ReadMe's own theme class.
+   -------------------------------------------------------------------------- */
+body.ThemeContext_dark,
+.ThemeContext_dark {
+  --fg-bg:            var(--fg-slate-950);
+  --fg-surface:       var(--fg-slate-900);
+  --fg-text:          var(--fg-slate-100);   /* 10.48:1 on surface */
+  --fg-text-muted:    var(--fg-slate-400);   /*  5.16:1 on surface */
+  --fg-border:        var(--fg-slate-800);
+  --fg-primary:       var(--fg-teal-300);    /*  7.12:1 on surface */
+  --fg-primary-hover: var(--fg-teal-200);
+  --fg-on-primary:    var(--fg-slate-950);   /*  9.62:1 on primary fill */
+  --fg-link:          var(--fg-indigo-300);  /*  6.84:1 on surface */
+  --fg-link-hover:    var(--fg-indigo-200);
+  --fg-success:       var(--fg-green-300);
+  --fg-warning:       var(--fg-amber-300);
+  --fg-danger:        var(--fg-red-300);
+  --fg-focus-ring:    var(--fg-teal-300);
+}
+
+/* --------------------------------------------------------------------------
+   3. ReadMe variable bindings -- VERIFIED names only.
+   These five are documented by ReadMe. Everything else ReadMe exposes should
+   be added in section 5 after you read the live list (see the note there).
+   -------------------------------------------------------------------------- */
+body {
+  --font-family: var(--fg-font-sans, ui-sans-serif, system-ui, -apple-system,
+                 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
+
+  --Header-background:   var(--fg-teal-900);
+  --Header-border-color:  var(--fg-teal-800);
+  --Header-tab-underline: var(--fg-teal-300);
+  --Header-button-padding: var(--fg-space-2, 0.5rem) var(--fg-space-3, 0.75rem);
+}
+
+body.ThemeContext_dark {
+  --Header-background:    var(--fg-slate-950);
+  --Header-border-color:  var(--fg-slate-800);
+  --Header-tab-underline: var(--fg-teal-300);
+}
+
+/* --------------------------------------------------------------------------
+   4. Global `.rm-` class styling -- documented, stable selectors.
+   -------------------------------------------------------------------------- */
+.rm-Header {
+  border-bottom: 1px solid var(--fg-border);
+}
+
+.rm-Sidebar {
+  background: var(--fg-bg);
+  border-right: 1px solid var(--fg-border);
+  font-size: var(--fg-text-sm);
+  line-height: var(--fg-leading-base);
+}
+
+.rm-Guides,
+.rm-ReferenceMain {
+  background: var(--fg-bg);
+  color: var(--fg-text);
+  font-size: var(--fg-text-base);
+  line-height: var(--fg-leading-base);
+}
+
+.rm-Guides a,
+.rm-ReferenceMain a {
+  color: var(--fg-link);
+  text-underline-offset: 0.15em;
+}
+
+.rm-Guides a:hover,
+.rm-ReferenceMain a:hover {
+  color: var(--fg-link-hover);
+}
+
+/* Headings -- tighter tracking and leading as size grows. */
+.rm-Guides h1, .rm-ReferenceMain h1 {
+  font-size: var(--fg-text-4xl);
+  line-height: 1.18;
+  letter-spacing: var(--fg-tracking-tight);
+  color: var(--fg-text);
+}
+.rm-Guides h2, .rm-ReferenceMain h2 {
+  font-size: var(--fg-text-3xl);
+  line-height: 1.25;
+  letter-spacing: var(--fg-tracking-tight);
+}
+.rm-Guides h3, .rm-ReferenceMain h3 {
+  font-size: var(--fg-text-2xl);
+  line-height: 1.3;
+}
+.rm-Guides h4, .rm-ReferenceMain h4 {
+  font-size: var(--fg-text-xl);
+  line-height: 1.4;
+}
+
+/* Never suppress the focus ring -- only restyle it. */
+.rm-Header :focus-visible,
+.rm-Sidebar :focus-visible,
+.rm-Guides :focus-visible,
+.rm-ReferenceMain :focus-visible {
+  outline: 2px solid var(--fg-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--fg-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-Header *, .rm-Sidebar *, .rm-Guides *, .rm-ReferenceMain * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. TODO -- fill from the live Appearance panel.
+
+   ReadMe publishes a fuller list of CSS variables and global classes than the
+   five bound in section 3, but that page did not render for me, so the
+   remaining names are NOT included here rather than guessed. Guessed variable
+   names fail silently -- they look applied and do nothing.
+
+   Once the ReadMe project is activated, open Appearance -> Custom CSS and
+   read the documented variable list, then bind the rest here, e.g.:
+
+       body {
+         --<verified-name>: var(--fg-primary);
+       }
+
+   Paste the real list back to me and I will finish this section and re-run
+   the contrast check against any new surface pairing it introduces.
+   -------------------------------------------------------------------------- */

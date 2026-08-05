@@ -1,0 +1,30 @@
+<!-- ==========================================================================
+     🕵️  Sherlock theme — ReadMe HTML tab
+     Paste into: Appearance → Custom CSS & JavaScript → HTML
+
+     ONLY NEEDED IF THE @import FAILS.
+
+     sherlock-readme.css already loads these four families via @import on its
+     first line. That is usually enough. Use this file only if the headings
+     render as plain Georgia in the live hub, which means ReadMe stripped or
+     relocated the @import (an @import that is not the first rule in a sheet is
+     silently discarded by every browser).
+
+     Do not use both at once. If you paste this, delete the @import line from
+     the top of sherlock-readme.css so the fonts aren't fetched twice.
+
+     <link> is preferable to @import regardless: @import blocks the CSS parser
+     and serialises the font fetch behind the stylesheet download, whereas
+     these tags let the browser start both in parallel.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IM+Fell+English:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap">
+
+<!-- display=swap is deliberate: text paints immediately in the fallback serif
+     and reflows when Besley arrives, rather than sitting invisible. On a docs
+     hub, readable-then-restyled beats blank-then-perfect. -->
