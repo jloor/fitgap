@@ -62,7 +62,7 @@ x-readme:
     - javascript
 
 servers:
-  - url: https://fitgap-jlabs1.vercel.app/api/v1
+  - url: https://api.fitgap.org/v1
     description: >-
       Live mock. Every response is derived from this specification — matched to
       the operation and returned from its documented example. Nothing is stored.
