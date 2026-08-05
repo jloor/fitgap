@@ -62,10 +62,11 @@ x-readme:
     - javascript
 
 servers:
-  - url: https://api.fitgap.org/v1
-    description: Production
-  - url: https://sandbox.api.fitgap.org/v1
-    description: Sandbox — seeded fixtures, no persistence
+  - url: https://fitgap-jlabs1.vercel.app/api/v1
+    description: >-
+      Live mock. Every response is derived from this specification — matched to
+      the operation and returned from its documented example. Nothing is stored.
+      Use a target id beginning `tgt_fail` to see the gate halt an analysis.
 
 security:
   - bearerAuth: []
@@ -235,6 +236,19 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Target' }
+              example:
+                id: tgt_91aF
+                title: Senior Data Migration Engineer
+                organization: Example Health
+                createdAt: '2026-08-04T18:10:00.000Z'
+                gateStatus: passed
+                gateResults:
+                  - { filterId: flt_remote, passed: true, reason: 'Fully remote, EST hours.' }
+                  - { filterId: flt_band, passed: true, reason: 'Rate stated.' }
+                requirements:
+                  - { id: req_01, text: 'Advanced Microsoft SQL Server (T-SQL)', bar: expert, required: true }
+                  - { id: req_04, text: 'Working within healthcare IT environments (RIS, PACS, EHR, EMR)', bar: experience, required: true }
+                  - { id: req_07, text: 'Developing or maintaining C# applications', bar: experience, required: true }
         '422': { $ref: '#/components/responses/UnprocessableEntity' }
 
   /targets/{targetId}:
@@ -299,6 +313,16 @@ paths:
           content:
             application/json:
               schema: { $ref: '#/components/schemas/Analysis' }
+              example:
+                id: ana_04Bq
+                targetId: tgt_91aF
+                createdAt: '2026-08-04T18:12:00.000Z'
+                gateOverridden: false
+                overrideReason: null
+                gapCount: { blocker: 1, partial: 0, unarticulated: 1 }
+                summary: >-
+                  Strong on migration and T-SQL. One real blocker (C#). One requirement
+                  flagged as possibly present but unevidenced.
         '409':
           description: Blocked by a failed hard filter.
           content:
@@ -351,6 +375,31 @@ paths:
                   data:
                     type: array
                     items: { $ref: '#/components/schemas/Gap' }
+              example:
+                data:
+                  - id: gap_3Xz8
+                    analysisId: ana_04Bq
+                    requirementText: Developing or maintaining C# applications
+                    bar: experience
+                    type: blocker
+                    severity: major
+                    rationale: Inventory lists C# as a skill with no shipped work attached.
+                    resolved: false
+                  - id: gap_5Qw2
+                    analysisId: ana_04Bq
+                    requirementText: Working within healthcare IT environments (RIS, PACS, EHR, EMR)
+                    bar: experience
+                    type: unarticulated
+                    severity: critical
+                    rationale: >-
+                      Inventory evidences EHR/EMR/PM depth. Imaging is unevidenced — but a prior
+                      role as an HL7 integration engineer makes absence unlikely.
+                    excavationQuestions:
+                      - id: qst_01
+                        question: >-
+                          In your HL7 integration work, did you build interfaces to any imaging
+                          systems? If so, which vendors?
+                    resolved: false
 
   /gaps/{gapId}:
     parameters:
@@ -453,6 +502,14 @@ paths:
                   data:
                     type: array
                     items: { $ref: '#/components/schemas/ProjectSuggestion' }
+              example:
+                data:
+                  - title: Rebuild one internal utility as a small C# console app and publish it
+                    rationale: >-
+                      The requirement is maintenance of data-plumbing utilities — file parsing,
+                      Excel I/O, crosswalks, format conversion. Evidence beats a course certificate.
+                    evidenceKind: repository
+                    estimatedEffort: days
 
   /projects:
     get:
